@@ -1,3 +1,21 @@
-[gd_scene format=3 uid="uid://cnx3hv3o6thgv"]
+[gd_scene load_steps=3 format=3 uid="uid://cnx3hv3o6thgv"]
+
+[ext_resource type="Texture2D" uid="uid://cw1sj2trpkjbx" path="res://Stages/crossroad/taiwan_crossroad_day.jpg" id="1_n2buv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_62erq"]
+size = Vector2(799, 37)
 
 [node name="Node2D" type="Node2D"]
+
+[node name="TaiwanCrossroadDay" type="Sprite2D" parent="."]
+position = Vector2(372.321, 301)
+scale = Vector2(0.267318, 0.267318)
+texture = ExtResource("1_n2buv")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(400, 564)
+shape = SubResource("RectangleShape2D_62erq")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]

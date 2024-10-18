@@ -14,6 +14,17 @@ config/name="fisticuffs_v1.0.0"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/viewport_width=800
+window/size/viewport_height=600
+
+[layer_names]
+
+2d_physics/layer_1="Player"
+2d_physics/layer_2="Walls"
+2d_physics/layer_3="Platforms"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
