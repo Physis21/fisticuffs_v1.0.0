@@ -1,4 +1,4 @@
-[gd_scene load_steps=87 format=3 uid="uid://xpa8xrbb1pkb"]
+[gd_scene load_steps=88 format=3 uid="uid://xpa8xrbb1pkb"]
 
 [ext_resource type="Texture2D" uid="uid://wuevtkqvt281" path="res://Characters/John/sprites/W4.png" id="1_00er6"]
 [ext_resource type="Texture2D" uid="uid://bdtcbpkkyvnpq" path="res://Characters/John/sprites/W5.png" id="1_m1prn"]
@@ -867,7 +867,12 @@ _data = {
 "j5Hit": SubResource("Animation_ihdvd")
 }
 
-[node name="John" type="CharacterBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hy7yn"]
+size = Vector2(39, 88)
+
+[node name="JOHN" type="CharacterBody2D"]
+
+[node name="StateMachine" type="Node" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_6qc4k")
@@ -877,3 +882,11 @@ animation = &"W5"
 libraries = {
 "": SubResource("AnimationLibrary_i7y45")
 }
+
+[node name="CollisionBox" type="CollisionShape2D" parent="."]
+position = Vector2(-5.5, 4)
+shape = SubResource("RectangleShape2D_hy7yn")
+
+[node name="Raycasts" type="Node" parent="."]
+
+[node name="Ground" type="RayCast2D" parent="Raycasts"]
