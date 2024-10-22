@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btogodl1etpjf"
-path="res://.godot/imported/8Hit.png-f3dfaa9824548d9e63a9aaa5ea631b8c.ctex"
+uid="uid://cfxdg1vii31bm"
+path="res://.godot/imported/B5.png-877fa4fa24e57d9a30e71997e4daff8a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/John/sprites/8Hit.png"
-dest_files=["res://.godot/imported/8Hit.png-f3dfaa9824548d9e63a9aaa5ea631b8c.ctex"]
+source_file="res://Characters/John/sprites/B5.png"
+dest_files=["res://.godot/imported/B5.png-877fa4fa24e57d9a30e71997e4daff8a.ctex"]
 
 [params]
 
