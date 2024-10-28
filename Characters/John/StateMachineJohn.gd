@@ -21,6 +21,7 @@ func state_logic(delta):
 func get_transition(delta):
 	# TODO: CONTINUE HERE
 	parent.move_and_slide()
+	parent.state.text = str(state)
 	match state:
 		states.STAND:
 			if Input.get_action_strength("right_%s" % id) == 1:
@@ -52,7 +53,7 @@ func get_transition(delta):
 				if parent.velocity.x > 0:
 					parent._frame()
 				parent.velocity.x = -parent.WALKSPEED
-			if Input.is_action_pressed("right_%s" % id):
+			elif Input.is_action_pressed("right_%s" % id):
 				if parent.velocity.x < 0:
 					parent._frame()
 				parent.velocity.x = parent.WALKSPEED

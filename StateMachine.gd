@@ -35,7 +35,7 @@ func set_state(new_state):
 		enter_state(new_state, previous_state)
 		
 func add_state(state_name):
-	states[state_name] = states.size()  # returns nb of entries in dictionary
+	states[state_name] = state_name  # returns nb of entries in dictionary
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

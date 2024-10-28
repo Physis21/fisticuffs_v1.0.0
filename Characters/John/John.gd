@@ -12,6 +12,8 @@ const FALLINGSPEED = 900
 const MAXFALLSPEED = 900
 const TRACTION = 40
 
+@onready var state = $State
+
 var frame = 0
 func updateframes(delta):
 	frame += 1
@@ -33,4 +35,4 @@ func _ready():
 	pass
 
 func _physics_process(delta):
-	pass
+	$Frames.text = str(frame)
