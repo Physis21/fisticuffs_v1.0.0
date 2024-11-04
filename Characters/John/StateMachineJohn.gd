@@ -168,7 +168,7 @@ func Landing():
 	if state_includes([states.AIR]):
 		if (parent.GroundL.is_colliding()) and parent.velocity.y > 0:
 			var collider = parent.GroundL.get_collider()
-			print("colling GroundL")
+			print("colliding GroundL")
 			parent.frame = 0
 			if parent.velocity.y > 0:
 				print("set y velocity to 0")
@@ -177,7 +177,7 @@ func Landing():
 			return true
 		elif (parent.GroundR.is_colliding()) and parent.velocity.y > 0:
 			var collider2 = parent.GroundR.get_collider()
-			print("colling GroundR")
+			print("colliding GroundR")
 			parent.frame = 0
 			if parent.velocity.y > 0:
 				parent.velocity.y = 0

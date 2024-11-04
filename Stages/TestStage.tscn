@@ -49,4 +49,4 @@ editor_draw_limits = true
 editor_draw_drag_margin = true
 
 [node name="JOHN" parent="." instance=ExtResource("2_ea7ob")]
-position = Vector2(244, 494)
+position = Vector2(260, 367)
