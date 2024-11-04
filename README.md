@@ -11,6 +11,7 @@ For now, keep 800 width and 600 height, for a 4:3 ratio like SF3
 ## Progression
 - Part 4, 21:00
 - Check why we fall through floor after jumping, check raycasts which may be different in godot 4
-- Possible idea: drop raycasts entirely because they can't work for collision at high speeds.
-- Instead, use collisionshape2D collision
+- Reason was Raycasts need to be "Hit from inside" = On, and I forgot to change John's collision layer mask
+- Small changes to do in "Revamping your Plat... Godot 4.0", which were the reason for the bugs
+- replace clamp and lerp by clampf and lerpf
  

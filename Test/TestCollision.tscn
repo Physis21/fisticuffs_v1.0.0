@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2ygwehug21je"]
+
+[ext_resource type="PackedScene" uid="uid://b186ftq0h5crx" path="res://Characters/MovableBlock/MovableBlock.tscn" id="1_fxwhw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_holoc"]
+size = Vector2(842.5, 87)
+
+[node name="TestCollision" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(398, 545)
+shape = SubResource("RectangleShape2D_holoc")
+
+[node name="MovableBlock" parent="." instance=ExtResource("1_fxwhw")]

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://b186ftq0h5crx"]
+
+[ext_resource type="Script" path="res://Characters/MovableBlock/movable_block.gd" id="1_dtea1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdodk"]
+size = Vector2(32, 32)
+
+[node name="MovableBlock" type="CharacterBody2D"]
+collision_mask = 6
+script = ExtResource("1_dtea1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_jdodk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Sprite2D"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.180392, 1, 1, 1)

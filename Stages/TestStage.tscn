@@ -22,6 +22,7 @@ collision_layer = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 position = Vector2(399.75, 576)
 shape = SubResource("RectangleShape2D_62erq")
+debug_color = Color(0, 0.257052, 0.6592, 0.42)
 
 [node name="Walls" type="StaticBody2D" parent="."]
 collision_layer = 2
@@ -49,5 +50,4 @@ editor_draw_limits = true
 editor_draw_drag_margin = true
 
 [node name="JOHN" parent="." instance=ExtResource("2_ea7ob")]
-position = Vector2(252, 496)
-collision_mask = 0
+position = Vector2(252, 408)
