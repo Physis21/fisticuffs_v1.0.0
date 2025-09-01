@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btogodl1etpjf"
-path="res://.godot/imported/Hit8.png-c5f658ed5be3791155dafbc36783f0df.ctex"
+uid="uid://bnicu4s6pmvx6"
+path="res://.godot/imported/frame0004.png-5ca267a0dbe2029e13d5c84bf14d22cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/John/sprites/Hit8.png"
-dest_files=["res://.godot/imported/Hit8.png-c5f658ed5be3791155dafbc36783f0df.ctex"]
+source_file="res://Effects/landing_effect/frame0004.png"
+dest_files=["res://.godot/imported/frame0004.png-5ca267a0dbe2029e13d5c84bf14d22cd.ctex"]
 
 [params]
 

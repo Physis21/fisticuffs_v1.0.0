@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jucqa10tu33k"
-path="res://.godot/imported/idle.png-53a8ffca32469530a7dd571e5212319e.ctex"
+uid="uid://dv1spu3k6xjqb"
+path="res://.godot/imported/fastfall.png-d34df47c8b2838f9aaebe8b7e52c08cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/John/sprites/idle.png"
-dest_files=["res://.godot/imported/idle.png-53a8ffca32469530a7dd571e5212319e.ctex"]
+source_file="res://Characters/John/sprites/fastfall.png"
+dest_files=["res://.godot/imported/fastfall.png-d34df47c8b2838f9aaebe8b7e52c08cf.ctex"]
 
 [params]
 

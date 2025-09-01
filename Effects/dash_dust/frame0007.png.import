@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dllcai1dcb4dd"
-path="res://.godot/imported/j5A.png-129cfb7150e1335c7d8054a22ab8e407.ctex"
+uid="uid://b1nxi2mshy54g"
+path="res://.godot/imported/frame0007.png-a7eb7f526bad1b6e8c0444e4d8be2a19.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/John/sprites/j5A.png"
-dest_files=["res://.godot/imported/j5A.png-129cfb7150e1335c7d8054a22ab8e407.ctex"]
+source_file="res://Effects/dash_dust/frame0007.png"
+dest_files=["res://.godot/imported/frame0007.png-a7eb7f526bad1b6e8c0444e4d8be2a19.ctex"]
 
 [params]
 

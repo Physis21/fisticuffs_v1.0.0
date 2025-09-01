@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c32ndhppqsnnq"
-path="res://.godot/imported/j5Hit.png-53dbd4c9104270581232f4efd975a3e9.ctex"
+uid="uid://pb4ow02g54a5"
+path="res://.godot/imported/wallJ.png-3b6f48cace2ca8ce4c87236cb368343a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/John/sprites/j5Hit.png"
-dest_files=["res://.godot/imported/j5Hit.png-53dbd4c9104270581232f4efd975a3e9.ctex"]
+source_file="res://Characters/John/sprites/wallJ.png"
+dest_files=["res://.godot/imported/wallJ.png-3b6f48cace2ca8ce4c87236cb368343a.ctex"]
 
 [params]
 

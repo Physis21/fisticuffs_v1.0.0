@@ -123,22 +123,22 @@ func enter_state(new_state, old_state):
 			parent.play_animation('idle')
 			parent.states.text = str('STAND')
 		states.WALK:
-			parent.play_animation('W6')
+			parent.play_animation('6W')
 			parent.states.text = str('WALK')
 		states.JUMP_SQUAT:
-			parent.play_animation('j_squat')
+			parent.play_animation('jSquat')
 			parent.states.text = str('JUMP_SQUAT')
 		states.SHORT_HOP:
-			parent.play_animation("j5")
+			parent.play_animation("j5Up")
 			parent.states.text = str('SHORT_HOP')
 		states.FULL_HOP:
-			parent.play_animation("j5")
+			parent.play_animation("j5Up")
 			parent.states.text = str('FULL_HOP')
 		states.AIR:
-			parent.play_animation("j5")
+			parent.play_animation("j5Up")
 			parent.states.text = str('AIR')
 		states.LANDING:
-			parent.play_animation('j_squat')
+			parent.play_animation('jSquat')
 			parent.states.text = str('LANDING')
 			
 	

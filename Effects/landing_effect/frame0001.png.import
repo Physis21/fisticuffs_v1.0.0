@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jucqa10tu33k"
-path="res://.godot/imported/idle.png-53a8ffca32469530a7dd571e5212319e.ctex"
+uid="uid://dvxvy8wrfloft"
+path="res://.godot/imported/frame0001.png-8bb583ad5d249cfa4b16976fb42f614f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/John/sprites/idle.png"
-dest_files=["res://.godot/imported/idle.png-53a8ffca32469530a7dd571e5212319e.ctex"]
+source_file="res://Effects/landing_effect/frame0001.png"
+dest_files=["res://.godot/imported/frame0001.png-8bb583ad5d249cfa4b16976fb42f614f.ctex"]
 
 [params]
 

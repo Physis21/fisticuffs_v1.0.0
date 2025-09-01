@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wuevtkqvt281"
-path="res://.godot/imported/W4.png-8989938436cabed5885e293ee0afe080.ctex"
+uid="uid://2m86hh3vyjhj"
+path="res://.godot/imported/John-faces.jpg-840f21d70515c1f82308c4d4528d38ac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/John/sprites/W4.png"
-dest_files=["res://.godot/imported/W4.png-8989938436cabed5885e293ee0afe080.ctex"]
+source_file="res://Notes/Characters/artwork/John-faces.jpg"
+dest_files=["res://.godot/imported/John-faces.jpg-840f21d70515c1f82308c4d4528d38ac.ctex"]
 
 [params]
 
