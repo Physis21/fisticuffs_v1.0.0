@@ -9,7 +9,7 @@ var fastfall : bool = false
 var jump_squat : int = 5
 var lag_frames:  int = 0
 var landing_frames : int = 3
-var previous_mov_input : int = 5
+var previous_mov_input : String = 'neutral'
 
 # Onready Variables
 @onready var GroundL = $Raycasts/GroundL

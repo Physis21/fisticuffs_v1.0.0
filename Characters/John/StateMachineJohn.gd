@@ -26,6 +26,7 @@ func state_logic(delta):
 func get_transition(delta):
 	parent.move_and_slide()
 	parent.state.text = str(state)
+	var direction = get_rightleft(id)
 	
 	if Landing() == true:
 		parent._frame()
@@ -39,12 +40,12 @@ func get_transition(delta):
 			if Input.is_action_just_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
-			if Input.get_action_strength("right_%s" % id) == 1:
+			if direction == 'right':
 				parent.velocity.x = parent.WALKSPEED
 				parent._frame()
 				parent.turn(false)
 				return states.WALK
-			if Input.get_action_strength("left_%s" % id) == 1:
+			if direction == 'left':
 				parent.velocity.x = -parent.WALKSPEED
 				parent._frame()
 				parent.turn(true)
@@ -57,11 +58,11 @@ func get_transition(delta):
 				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
 		states.JUMP_SQUAT:
 			parent.velocity.x = lerpf(parent.velocity.x, 0.0, 0.08)
-			if parent.previous_mov_input == 5:
-				if Input.is_action_pressed("right_%s" % id):
-					parent.previous_mov_input = 6
-				elif Input.is_action_pressed("left_%s" % id):
-					parent.previous_mov_input = 4
+			if parent.previous_mov_input == 'neutral':
+				if direction == 'right':
+					parent.previous_mov_input = 'right'
+				elif direction == 'left':
+					parent.previous_mov_input = 'left'
 			if parent.frame == parent.jump_squat:
 				if not Input.is_action_pressed("jump_%s" % id):
 					#parent.velocity.x = lerpf(parent.velocity.x, 0.0, 0.8)  # slow towards 0 at 8%
@@ -73,17 +74,17 @@ func get_transition(delta):
 					return states.FULL_HOP
 		states.SHORT_HOP:
 			parent.velocity.y = -parent.JUMPFORCE
-			if parent.previous_mov_input == 6:
+			if parent.previous_mov_input == 'right':
 				parent.velocity.x = parent.MAXAIRSPEED
-			elif parent.previous_mov_input == 4:
+			elif parent.previous_mov_input == 'left':
 				parent.velocity.x = -parent.MAXAIRSPEED
 			parent._frame()
 			return states.AIR
 		states.FULL_HOP:
 			parent.velocity.y = -parent.MAXJUMPFORCE
-			if parent.previous_mov_input == 6:
+			if parent.previous_mov_input == 'right':
 				parent.velocity.x = parent.MAXAIRSPEED
-			elif parent.previous_mov_input == 4:
+			elif parent.previous_mov_input == 'left':
 				parent.velocity.x = -parent.MAXAIRSPEED
 			parent._frame()
 			return states.AIR
@@ -93,12 +94,12 @@ func get_transition(delta):
 			if Input.is_action_just_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
-			if Input.is_action_pressed("left_%s" % id):
+			if direction == 'left':
 				if parent.velocity.x > 0:
 					parent._frame()
 				parent.velocity.x = -parent.WALKSPEED
 				parent.turn(true)
-			elif Input.is_action_pressed("right_%s" % id):
+			elif direction == 'right':
 				if parent.velocity.x < 0:
 					parent._frame()
 				parent.velocity.x = parent.WALKSPEED
@@ -163,6 +164,7 @@ func state_includes(state_array):
 	return false
 	
 func AIRMOVEMENT():
+	var direction = get_rightleft(id)
 	if parent.velocity.y < parent.FALLINGSPEED:
 		parent.velocity.y += parent.FALLSPEED
 	if Input.is_action_pressed("down_%s" % id) and parent.velocity.y > -150 and not parent.fastfall:
@@ -174,24 +176,24 @@ func AIRMOVEMENT():
 		
 	if abs(parent.velocity.x) >= abs(parent.MAXAIRSPEED):
 		if parent.velocity.x > 0 :
-			if Input.is_action_pressed("left_%s" % id):
+			if direction == 'left':
 				parent.velocity.x += -parent.AIR_ACCEL
 			#elif Input.is_action_pressed("right_%s" % id):
 				#parent.velocity.x = parent.velocity.x
 		if parent.velocity.x < 0 :
-			if Input.is_action_pressed("right_%s" % id):
+			if direction == 'right':
 				parent.velocity.x += parent.AIR_ACCEL
 			#elif Input.is_action_pressed("left_%s" % id):
 				#parent.velocity.x = parent.velocity.x				
 	if abs(parent.velocity.x) < abs(parent.MAXAIRSPEED):
 		var air_accel : int
-		if parent.previous_mov_input == 5:
+		if parent.previous_mov_input == 'neutral':
 			air_accel = parent.AIR_ACCEL
 		else:
 			air_accel = parent.AIR_ACCEL / 3
-		if Input.is_action_pressed("left_%s" % id):
+		if direction == 'left':
 			parent.velocity.x += -air_accel
-		if Input.is_action_pressed("right_%s" % id):
+		if direction == 'right':
 			parent.velocity.x += air_accel
 	
 	#if not Input.is_action_pressed("left_%s" % id) and not Input.is_action_pressed("right_%s" % id):
@@ -209,7 +211,7 @@ func Landing():
 			if parent.velocity.y >= 0:
 				parent.velocity.y = 0
 			parent.fastfall = false
-			parent.previous_mov_input = 5
+			parent.previous_mov_input = 'neutral'
 			return true
 		elif (parent.GroundR.is_colliding()) and parent.velocity.y >= 0:
 			var collider2 = parent.GroundR.get_collider()
@@ -217,7 +219,7 @@ func Landing():
 			if parent.velocity.y >= 0:
 				parent.velocity.y = 0
 			parent.fastfall = false
-			parent.previous_mov_input = 5
+			parent.previous_mov_input = 'neutral'
 			return true
 
 func Falling():
