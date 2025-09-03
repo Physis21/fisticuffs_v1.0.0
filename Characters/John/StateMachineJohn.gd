@@ -7,6 +7,8 @@ func _ready():
 	add_state('JUMP_SQUAT')
 	add_state('SHORT_HOP')
 	add_state('FULL_HOP')
+	add_state('SHORT_HOP_5')
+	add_state('FULL_HOP_5')
 	add_state('DASH')
 	add_state('RUN')
 	add_state('WALK')
@@ -65,10 +67,18 @@ func get_transition(delta):
 					return states.FULL_HOP
 		states.SHORT_HOP:
 			parent.velocity.y = -parent.JUMPFORCE
+			if Input.is_action_pressed("right_%s" % id):
+				parent.velocity.x = parent.MAXAIRSPEED
+			if Input.is_action_pressed("left_%s" % id):
+				parent.velocity.x = -parent.MAXAIRSPEED
 			parent._frame()
 			return states.AIR
 		states.FULL_HOP:
 			parent.velocity.y = -parent.MAXJUMPFORCE
+			if Input.is_action_pressed("right_%s" % id):
+				parent.velocity.x = parent.MAXAIRSPEED
+			if Input.is_action_pressed("left_%s" % id):
+				parent.velocity.x = -parent.MAXAIRSPEED
 			parent._frame()
 			return states.AIR
 		states.DASH:
@@ -129,10 +139,10 @@ func enter_state(new_state, old_state):
 			parent.play_animation('jSquat')
 			parent.states.text = str('JUMP_SQUAT')
 		states.SHORT_HOP:
-			parent.play_animation("5JUp")
+			parent.play_animation("jSquat")
 			parent.states.text = str('SHORT_HOP')
 		states.FULL_HOP:
-			parent.play_animation("5JUp")
+			parent.play_animation("jSquat")
 			parent.states.text = str('FULL_HOP')
 		states.AIR:
 			parent.play_animation("5JUp")
@@ -165,13 +175,13 @@ func AIRMOVEMENT():
 		if parent.velocity.x > 0 :
 			if Input.is_action_pressed("left_%s" % id):
 				parent.velocity.x += -parent.AIR_ACCEL
-			elif Input.is_action_pressed("right_%s" % id):
-				parent.velocity.x = parent.velocity.x
+			#elif Input.is_action_pressed("right_%s" % id):
+				#parent.velocity.x = parent.velocity.x
 		if parent.velocity.x < 0 :
 			if Input.is_action_pressed("left_%s" % id):
 				parent.velocity.x = parent.velocity.x
-			elif Input.is_action_pressed("right_%s" % id):
-				parent.velocity.x += parent.AIR_ACCEL
+			#elif Input.is_action_pressed("right_%s" % id):
+				#parent.velocity.x += parent.AIR_ACCEL
 				
 	if abs(parent.velocity.x) < abs(parent.MAXAIRSPEED):
 		if Input.is_action_pressed("left_%s" % id):
@@ -179,11 +189,11 @@ func AIRMOVEMENT():
 		if Input.is_action_pressed("right_%s" % id):
 			parent.velocity.x += parent.AIR_ACCEL
 	
-	if not Input.is_action_pressed("left_%s" % id) and not Input.is_action_pressed("right_%s" % id):
-		if parent.velocity.x < 0:
-			parent.velocity.x += parent.AIR_ACCEL / 5
-		if parent.velocity.x > 0:
-			parent.velocity.x += -parent.AIR_ACCEL / 5
+	#if not Input.is_action_pressed("left_%s" % id) and not Input.is_action_pressed("right_%s" % id):
+		#if parent.velocity.x < 0:
+			#parent.velocity.x += parent.AIR_ACCEL / 5
+		#if parent.velocity.x > 0:
+			#parent.velocity.x += -parent.AIR_ACCEL / 5
 			
 			
 func Landing():

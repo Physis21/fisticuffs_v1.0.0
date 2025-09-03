@@ -9,6 +9,7 @@ var fastfall = false
 var jump_squat = 5
 var lag_frames = 0
 var landing_frames = 0
+var previous_mov_input : int = 5
 
 # Onready Variables
 @onready var GroundL = $Raycasts/GroundL
@@ -23,7 +24,7 @@ const GRAVITY = 1800 * 2
 const JUMPFORCE = 900 # 500 * 2
 const MAXJUMPFORCE = 1200 # 1000 * 2
 const MAXAIRSPEED = 300 # 300 * 2
-const AIR_ACCEL = 25 * 2
+const AIR_ACCEL = 10
 const FALLSPEED = 60 # 60 * 2
 const FALLINGSPEED = 800 # 900 * 2
 const MAXFALLSPEED = 800 # 900 * 2
