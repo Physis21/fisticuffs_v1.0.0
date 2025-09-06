@@ -11,12 +11,16 @@ func _ready():
 	add_state('WALK')
 	add_state('TURN')
 	add_state('CROUCH')
+	add_state('AIR')
 	add_state('AIR_RISING')
 	add_state('AIR_FALLING')
 	add_state('LANDING')
 	add_state('GROUND_ATTACK')
+	add_state('AIR_ATTACK')
 	add_state('S5A')
 	add_state('S2A')
+	add_state('S8A')
+	add_state('J6A')
 	# delays execution of code until there is an idle time in the main loop
 	call_deferred("set_state", states.STAND)  
 	pass
@@ -41,6 +45,10 @@ func get_transition(delta):
 	if Input.is_action_just_pressed("attack_A_%s" % id) && can_grounded_attack():
 		parent._frame()
 		return states.GROUND_ATTACK
+	
+	if Input.is_action_just_pressed("attack_A_%s" % id) && can_air_attack():
+		parent._frame()
+		return states.AIR_ATTACK
 	
 	match state:
 		states.STAND:
@@ -161,6 +169,8 @@ func get_transition(delta):
 			if parent.velocity.x < 0:
 				parent.velocity.x = parent.velocity.x + parent.TRACTION / 2
 				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+		states.AIR:
+			AIRMOVEMENT()
 		states.AIR_RISING:
 			AIRMOVEMENT()
 			if parent.velocity.y > 0:
@@ -195,11 +205,90 @@ func get_transition(delta):
 					return states.STAND
 				parent.lag_frames = 0
 		states.GROUND_ATTACK:
+			if Input.is_action_pressed("up_%s" % id):
+				parent._frame()
+				return states.S8A
 			if Input.is_action_pressed("down_%s" % id):
 				parent._frame()
 				return states.S2A
+			if direction in ['right', 'left']:
+				parent._frame()
+				parent.turn(direction)
+				return states.S5A
 			parent._frame()
 			return states.S5A
+		states.AIR_ATTACK:
+			if direction in ['right', 'left']:
+				parent._frame()
+				return states.J6A
+			parent._frame()
+			return states.J6A
+		states.S5A:
+			if parent.frame == 0:
+				parent.s5A()
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION
+					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
+				if parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION
+					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x,0)
+			if parent.s5A() == true:
+				if Input.is_action_pressed("down_%s" % id):
+					parent._frame()
+					return states.CROUCH
+				else:
+					parent._frame()
+					return states.STAND
+		states.S2A:
+			if parent.frame == 0:
+				parent.s2A()
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION
+					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
+				if parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION
+					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x,0)
+			if parent.s2A() == true:
+				if Input.is_action_pressed("down_%s" % id):
+					parent._frame()
+					return states.CROUCH
+				else:
+					parent._frame()
+					return states.STAND
+		states.S8A:
+			if parent.frame == 0:
+				parent.s8A()
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.TRACTION
+					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
+				if parent.velocity.x < 0:
+					parent.velocity.x += parent.TRACTION
+					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x,0)
+			if parent.s8A() == true:
+				if Input.is_action_pressed("down_%s" % id):
+					parent._frame()
+					return states.CROUCH
+				else:
+					parent._frame()
+					return states.STAND
+		states.J6A:
+			AIRMOVEMENT()
+			if parent.frame == 0:
+				parent.j6A()
+			if parent.frame >= 1:
+				if parent.velocity.x > 0:
+					parent.velocity.x += -parent.AIR_ACCEL/5
+					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
+				if parent.velocity.x < 0:
+					parent.velocity.x += parent.AIR_ACCEL/5
+					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x,0)
+			if parent.j6A() == true:
+				parent._frame()
+				return states.AIR
+				
 
 func enter_state(new_state, old_state):
 	parent.states.text = str(new_state)
@@ -213,18 +302,29 @@ func enter_state(new_state, old_state):
 		states.JUMP_SQUAT:
 			parent.play_animation('jSquat')
 		states.SHORT_HOP:
-			parent.play_animation("jSquat")
+			parent.play_animation('jSquat')
 		states.FULL_HOP:
-			parent.play_animation("jSquat")
+			parent.play_animation('jSquat')
+		states.AIR:
+			parent.play_animation('air')
 		states.AIR_RISING:
-			parent.play_animation("5JUp")
+			parent.play_animation('5JUp')
 		states.AIR_FALLING:
-			parent.play_animation("5JDown")
+			parent.play_animation('5JDown')
 		states.LANDING:
 			parent.play_animation('jSquat')
 		states.CROUCH:
-			parent.play_animation("crouch")
-			
+			parent.play_animation('crouch')
+		states.GROUND_ATTACK:
+			pass
+		states.S5A:
+			parent.play_animation('s5A')
+		states.S2A:
+			parent.play_animation('s2A')
+		states.S8A:
+			parent.play_animation('s8A')
+		states.J6A:
+			parent.play_animation('j6A')
 	
 func exit_state(old_state, new_state):
 	pass
@@ -237,6 +337,10 @@ func state_includes(state_array):
 	
 func can_grounded_attack():
 	if state_includes([states.STAND, states.WALK, states.RUN, states.CROUCH]):
+		return true
+
+func can_air_attack():
+	if state_includes([states.AIR, states.AIR_RISING, states.AIR_FALLING]):
 		return true
 	
 func AIRMOVEMENT():
@@ -280,7 +384,7 @@ func AIRMOVEMENT():
 			
 			
 func Landing():
-	if state_includes([states.AIR_RISING, states.AIR_FALLING]):
+	if state_includes([states.AIR, states.AIR_RISING, states.AIR_FALLING, states.J6A]):
 		if (parent.GroundL.is_colliding() or parent.GroundR.is_colliding()) and parent.velocity.y >= 0:
 			var collider = parent.GroundL.get_collider()
 			parent.frame = 0

@@ -37,7 +37,7 @@ const MAXFALLSPEED : int = 800 # 900 * 2
 const TRACTION : int = 400 * 2
 
 func create_hitbox(width, height, damage, duration, hoz_proj, ver_proj, type, points, hitlag=1):
-	var hitbox_instance = hitbox.instance()
+	var hitbox_instance = hitbox.instantiate()
 	self.add_child(hitbox_instance)
 	# rotate the points
 	if dir == 'right':
@@ -79,6 +79,24 @@ func _physics_process(delta):
 # Attacks
 func s5A():
 	if frame == 9:
-		create_hitbox(40, 20, 8, 9, 100, 0, 'normal', Vector2(64, 32), 1)
+		create_hitbox(40, 20, 8, 9, 100, 0, 'normal', Vector2(64, -25), 1)
 	if frame >= 26:
+		return true
+		
+func s2A():
+	if frame == 6:
+		create_hitbox(40, 20, 8, 9, 100, 0, 'normal', Vector2(64, -10), 1)
+	if frame >= 16:
+		return true
+		
+func s8A():
+	if frame == 10:
+		create_hitbox(20, 40, 8, 9, 100, 0, 'normal', Vector2(40, -70), 1)
+	if frame >= 27:
+		return true
+
+func j6A():
+	if frame == 18:
+		create_hitbox(45, 30, 8, 9, 100, 0, 'normal', Vector2(60, -10), 1)
+	if frame >= 37:
 		return true
