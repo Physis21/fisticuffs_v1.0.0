@@ -14,6 +14,7 @@ func _ready():
 	add_state('AIR_RISING')
 	add_state('AIR_FALLING')
 	add_state('LANDING')
+	add_state('GROUND_ATTACK')
 	# delays execution of code until there is an idle time in the main loop
 	call_deferred("set_state", states.STAND)  
 	pass
@@ -24,7 +25,7 @@ func state_logic(delta):
 	
 func get_transition(delta):
 	parent.move_and_slide()
-	parent.state.text = str(state)
+	parent.states.text = str(state)
 	var direction = get_rightleft(id)
 	var dash_input = Input.is_action_pressed("dash_%s" % id)
 	
@@ -46,22 +47,22 @@ func get_transition(delta):
 			if direction == 'right' and not dash_input:
 				parent.velocity.x = parent.WALKSPEED
 				parent._frame()
-				parent.turn(false)
+				parent.turn('right')
 				return states.WALK
 			elif direction == 'left' and not dash_input:
 				parent.velocity.x = -parent.WALKSPEED
 				parent._frame()
-				parent.turn(true)
+				parent.turn('left')
 				return states.WALK
 			elif direction == 'right' and dash_input:
 				parent.velocity.x = parent.RUNSPEED
 				parent._frame()
-				parent.turn(false)
+				parent.turn('right')
 				return states.RUN
 			elif direction == 'left' and dash_input:
 				parent.velocity.x = -parent.RUNSPEED
 				parent._frame()
-				parent.turn(true)
+				parent.turn('left')
 				return states.RUN
 			if parent.velocity.x > 0 and state == states.STAND:
 				parent.velocity.x += -parent.TRACTION * 1
@@ -112,12 +113,12 @@ func get_transition(delta):
 				if parent.velocity.x > 0:
 					parent._frame()
 				parent.velocity.x = -parent.RUNSPEED
-				parent.turn(true)
+				parent.turn('left')
 			elif direction == 'right':
 				if parent.velocity.x < 0:
 					parent._frame()
 				parent.velocity.x = parent.RUNSPEED
-				parent.turn(false)
+				parent.turn('right')
 			else:
 				parent._frame()
 				return states.STAND
@@ -131,12 +132,12 @@ func get_transition(delta):
 			if direction == 'right' and dash_input:
 				parent.velocity.x = parent.RUNSPEED
 				parent._frame()
-				parent.turn(false)
+				parent.turn('right')
 				return states.RUN
 			elif direction == 'left' and dash_input:
 				parent.velocity.x = -parent.RUNSPEED
 				parent._frame()
-				parent.turn(true)
+				parent.turn('left')
 				return states.RUN
 			elif direction == 'neutral':
 				parent._frame()

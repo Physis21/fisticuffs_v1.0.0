@@ -1,7 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://xpa8xrbb1pkb"]
+[gd_scene load_steps=20 format=3 uid="uid://xpa8xrbb1pkb"]
 
 [ext_resource type="Script" path="res://Characters/John/StateMachineJohn.gd" id="1_lswjr"]
 [ext_resource type="Script" path="res://Characters/John/John.gd" id="1_x5q8j"]
+[ext_resource type="PackedScene" uid="uid://l0seyh855irn" path="res://Hitbox/hitbox.tscn" id="2_8jr0u"]
 [ext_resource type="SpriteFrames" uid="uid://cfp0c81aanglg" path="res://Characters/John/JohnSprites.tres" id="3_18oiq"]
 
 [sub_resource type="Animation" id="Animation_yb3rw"]
@@ -407,6 +408,7 @@ collision_mask = 6
 platform_floor_layers = 4294967044
 platform_wall_layers = 2
 script = ExtResource("1_x5q8j")
+hitbox = ExtResource("2_8jr0u")
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource("1_lswjr")
