@@ -1,8 +1,22 @@
 extends CharacterBody2D
 
 # from fox stats
+
+# Global variables
 var frame = 0
 var dir = 'right'  # direction
+
+# Attributes
+@export var health = 1000
+@export var stocks = 3
+@export var weight = 100
+
+# Knockback
+var hdelay
+var vdelay
+var knockback
+var hitstun
+var connected: bool
 
 # Ground Variables
 
@@ -36,15 +50,15 @@ const FALLINGSPEED : int = 800 # 900 * 2
 const MAXFALLSPEED : int = 800 # 900 * 2
 const TRACTION : int = 400 * 2
 
-func create_hitbox(width, height, damage, duration, hoz_proj, ver_proj, type, points, hitlag=1):
+func create_hitbox(width, height, damage, duration, angle, knockback, type, points, hitlag=1):
 	var hitbox_instance = hitbox.instantiate()
 	self.add_child(hitbox_instance)
 	# rotate the points
 	if dir == 'right':
-		hitbox_instance.set_parameters(width, height, damage, duration, hoz_proj, ver_proj, type, points, hitlag)
+		hitbox_instance.set_parameters(width, height, damage, duration, angle, knockback, type, points, hitlag)
 	else:
 		var flip_x_points = Vector2(-points.x, points.y)
-		hitbox_instance.set_parameters(width, height, damage, duration, hoz_proj, ver_proj, type, flip_x_points, hitlag)
+		hitbox_instance.set_parameters(width, height, damage, duration, angle, knockback, type, flip_x_points, hitlag)
 	return hitbox_instance
 	
 func updateframes(delta):
@@ -79,24 +93,24 @@ func _physics_process(delta):
 # Attacks
 func s5A():
 	if frame == 9:
-		create_hitbox(40, 20, 8, 9, 100, 0, 'normal', Vector2(64, -25), 1)
+		create_hitbox(40, 20, 8, 9, 0, 100, 'normal', Vector2(64, -25), 1)
 	if frame >= 26:
 		return true
 		
 func s2A():
 	if frame == 6:
-		create_hitbox(40, 20, 8, 9, 100, 0, 'normal', Vector2(64, -10), 1)
+		create_hitbox(40, 20, 8, 9, 0, 100, 'normal', Vector2(64, -10), 1)
 	if frame >= 16:
 		return true
 		
 func s8A():
 	if frame == 10:
-		create_hitbox(20, 40, 8, 9, 100, 0, 'normal', Vector2(40, -70), 1)
+		create_hitbox(20, 40, 8, 9, 0, 100, 'normal', Vector2(40, -70), 1)
 	if frame >= 27:
 		return true
 
 func j6A():
 	if frame == 18:
-		create_hitbox(45, 30, 8, 9, 100, 0, 'normal', Vector2(60, -10), 1)
+		create_hitbox(45, 30, 8, 9, 0, 100, 'normal', Vector2(60, -10), 1)
 	if frame >= 37:
 		return true

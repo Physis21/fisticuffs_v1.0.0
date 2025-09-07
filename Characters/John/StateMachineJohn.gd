@@ -11,6 +11,7 @@ func _ready():
 	add_state('WALK')
 	add_state('TURN')
 	add_state('CROUCH')
+	add_state('CROUCHING')
 	add_state('AIR')
 	add_state('AIR_RISING')
 	add_state('AIR_FALLING')
@@ -169,6 +170,19 @@ func get_transition(delta):
 			if parent.velocity.x < 0:
 				parent.velocity.x = parent.velocity.x + parent.TRACTION / 2
 				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+		states.CROUCHING:
+			if Input.is_action_just_pressed("jump_%s" % id):
+				parent._frame()
+				return states.JUMP_SQUAT
+			if Input.is_action_just_released("down_%s" % id):
+				parent._frame()
+				return states.STAND
+			if parent.velocity.x > 0:
+				parent.velocity.x = parent.velocity.x - parent.TRACTION / 2
+				parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
+			if parent.velocity.x < 0:
+				parent.velocity.x = parent.velocity.x + parent.TRACTION / 2
+				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
 		states.AIR:
 			AIRMOVEMENT()
 		states.AIR_RISING:
@@ -253,7 +267,7 @@ func get_transition(delta):
 			if parent.s2A() == true:
 				if Input.is_action_pressed("down_%s" % id):
 					parent._frame()
-					return states.CROUCH
+					return states.CROUCHING
 				else:
 					parent._frame()
 					return states.STAND
@@ -315,6 +329,8 @@ func enter_state(new_state, old_state):
 			parent.play_animation('jSquat')
 		states.CROUCH:
 			parent.play_animation('crouch')
+		states.CROUCHING:
+			parent.play_animation('crouching')
 		states.GROUND_ATTACK:
 			pass
 		states.S5A:
@@ -412,3 +428,5 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 		parent.play_animation('6W')
 	if anim_name == '5Run':
 		parent.play_animation('6Run')
+	if anim_name == 'crouch':
+		enter_state('CROUCHING', 'CROUCH')

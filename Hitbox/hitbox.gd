@@ -4,8 +4,8 @@ extends Area2D
 @export var width = 300
 @export var height = 400
 @export var damage = 50
-@onready var vertical_projection = 0
-@onready var horizontal_projection = 100
+@onready var knockback = 100
+@onready var angle = 0
 @export var duration = 1500
 @export var hitlag_modifier = 1
 @export var type = 'normal'
@@ -14,7 +14,7 @@ extends Area2D
 var framez = 0.0
 var player_list = []  # list of player characters this hitbox cannot collide with
 
-func set_parameters(w,h,dam,dur,hp,vp,t,p,hit,parent=get_parent()):
+func set_parameters(w,h,dam,dur,a,kb,t,p,hit,parent=get_parent()):
 	self.position = Vector2(0,0)
 	player_list.append(parent)
 	player_list.append(self)  # just in case
@@ -22,16 +22,25 @@ func set_parameters(w,h,dam,dur,hp,vp,t,p,hit,parent=get_parent()):
 	height = h
 	damage = dam
 	duration = dur
-	vertical_projection = vp
-	horizontal_projection = hp
+	angle = a
+	knockback = kb
 	type = t
 	hitlag_modifier = hit
 	self.position = p
 	update_extents()
 	#connect("area_entered", self, "Hitbox_collide")
 	set_physics_process(true)
-	
 	pass
+
+#func Hitbox_collide(body):
+	#if !(body in player_list):
+		#player_list.append(body)
+		#var charstate
+		#charstate = body.get_node("StateMachine")
+		#weight = body.weight
+		#body.percentage += damage
+		#knockbackVal = knockback(damage, weight, angle, knockback)
+		#body.knockback = knockbackVal
 	
 func update_extents():
 	hitbox.shape.extents = Vector2(width, height)
