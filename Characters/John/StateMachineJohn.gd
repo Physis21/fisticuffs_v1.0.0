@@ -3,6 +3,7 @@ extends StateMachine
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	# grounded states
 	add_state('STAND')  # idle
 	add_state('JUMP_SQUAT')
 	add_state('SHORT_HOP')
@@ -12,12 +13,14 @@ func _ready():
 	add_state('TURN')
 	add_state('CROUCH')
 	add_state('CROUCHING')
+	add_state('LANDING')
+	# airborne states
 	add_state('AIR')
 	add_state('AIR_RISING')
 	add_state('AIR_FALLING')
 	add_state('AIR_FASTFALL')
 	add_state('WALL_CLING')
-	add_state('LANDING')
+	# attack states
 	add_state('GROUND_ATTACK')
 	add_state('AIR_ATTACK')
 	add_state('S5A')
@@ -41,6 +44,9 @@ func get_transition(delta):
 	if Landing() == true:
 		parent._frame()
 		return states.LANDING
+		
+	if WallCling(direction) == true:
+		return states.WALL_CLING
 		
 	if Falling() == true:
 		return states.AIR_FALLING
@@ -230,6 +236,19 @@ func get_transition(delta):
 					parent.lag_frames = 0
 					return states.STAND
 				parent.lag_frames = 0
+		states.WALL_CLING:
+			if parent.frame == 100:  # after a while, stop wall cling
+				return states.AIR_FALLING
+			if Input.is_action_pressed("jump_%s" % id):
+				print("jump pressed on wallcling")
+				parent.velocity.y = -parent.JUMPFORCE  # same strength as short hop
+				if parent.previous_mov_input == 'right':
+					parent.velocity.x += parent.MAXAIRSPEED
+				elif parent.previous_mov_input == 'left':
+					parent.velocity.x -= parent.MAXAIRSPEED
+				parent._frame()
+				parent.walljumped = true
+				return states.AIR_RISING
 		states.GROUND_ATTACK:
 			if Input.is_action_pressed("up_%s" % id):
 				parent._frame()
@@ -419,24 +438,45 @@ func Landing():
 	if state_includes([states.AIR, states.AIR_RISING, states.AIR_FALLING, states.AIR_FASTFALL, states.J6A]):
 		if (parent.GroundL.is_colliding() or parent.GroundR.is_colliding()) and parent.velocity.y >= 0:
 			var collider = parent.GroundL.get_collider()
-			parent.frame = 0
+			parent._frame()
 			if parent.velocity.y >= 0:
 				parent.velocity.y = 0
 			parent.fastfall = false
+			parent.walljumped = false
 			parent.previous_mov_input = 'neutral'
 			return true
 		elif (parent.GroundR.is_colliding()) and parent.velocity.y >= 0:
 			var collider2 = parent.GroundR.get_collider()
-			parent.frame = 0
+			parent._frame()
 			if parent.velocity.y >= 0:
 				parent.velocity.y = 0
 			parent.fastfall = false
+			parent.walljumped = false
 			parent.previous_mov_input = 'neutral'
 			return true
 
 func Falling():
 	if state_includes([states.RUN, states.WALK, states.STAND, states.CROUCH, states.CROUCHING, states.RUN, states.LANDING, states.JUMP_SQUAT]):
 		if not parent.GroundL.is_colliding() and not parent.GroundR.is_colliding():
+			return true
+			
+func WallCling(direction):
+	if not parent.GroundL.is_colliding() and not parent.GroundR.is_colliding():
+		if parent.WallL.is_colliding() and direction == 'right' and parent.walljumped == false:
+			var collider = parent.WallL.get_collider()
+			parent._frame()
+			parent.velocity.y = 0
+			parent.fastfall = false
+			parent.previous_mov_input = 'right'
+			parent.turn('right')
+			return true
+		if parent.WallR.is_colliding() and direction == 'left' and parent.walljumped == false:
+			var collider2 = parent.WallR.get_collider()
+			parent._frame()
+			parent.velocity.y = 0
+			parent.fastfall = false
+			parent.previous_mov_input = 'left'
+			parent.turn('left')
 			return true
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:

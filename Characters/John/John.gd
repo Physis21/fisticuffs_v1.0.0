@@ -21,6 +21,7 @@ var connected: bool
 # Ground Variables
 
 # Air Variables
+var walljumped : bool = false
 var fastfall : bool = false
 var jump_squat : int = 5
 var lag_frames:  int = 0

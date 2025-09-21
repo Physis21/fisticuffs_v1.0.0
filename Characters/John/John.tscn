@@ -603,7 +603,7 @@ libraries = {
 }
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
-position = Vector2(-4, 6.25)
+position = Vector2(0, 6.25)
 shape = SubResource("RectangleShape2D_hy7yn")
 
 [node name="Raycasts" type="Node2D" parent="."]
@@ -623,8 +623,16 @@ hit_from_inside = true
 collide_with_areas = true
 
 [node name="WallL" type="RayCast2D" parent="Raycasts"]
+position = Vector2(-10, 0)
+target_position = Vector2(-40, 0)
+collision_mask = 2
+hit_from_inside = true
 
 [node name="WallR" type="RayCast2D" parent="Raycasts"]
+position = Vector2(10, 0)
+target_position = Vector2(40, 0)
+collision_mask = 2
+hit_from_inside = true
 
 [node name="Frames" type="Label" parent="."]
 offset_left = -20.0
