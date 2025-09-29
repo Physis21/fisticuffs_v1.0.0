@@ -40,6 +40,10 @@ var selfState
 @onready var states = $State
 @onready var anim = $Sprite/AnimationPlayer
 
+# Preload collision shapes
+var standing_cshape = preload("res://Characters/John/cshapes/standing.tres")
+var crouching_cshape = preload("res://Characters/John/cshapes/crouching.tres")
+
 # JOHN's main attributes
 const WALKSPEED : int = 200 # 200.0 * 2
 const RUNSPEED : int = 800 # 390 * 2
