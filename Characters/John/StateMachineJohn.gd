@@ -20,6 +20,7 @@ func _ready():
 	add_state('AIR_FALLING')
 	add_state('AIR_FASTFALL')
 	add_state('WALL_CLING')
+	add_state('WALL_SQUAT')
 	# attack states
 	add_state('GROUND_ATTACK')
 	add_state('AIR_ATTACK')
@@ -44,9 +45,6 @@ func get_transition(delta):
 	if Landing() == true:
 		parent._frame()
 		return states.LANDING
-		
-	if WallCling(direction) == true:
-		return states.WALL_CLING
 		
 	if Falling() == true:
 		return states.AIR_FALLING
@@ -196,19 +194,27 @@ func get_transition(delta):
 				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
 		states.AIR:
 			AIRMOVEMENT()
+			if WallCling(direction) == true:
+				return states.WALL_CLING
 		states.AIR_RISING:
 			AIRMOVEMENT()
+			if WallCling(direction) == true:
+				return states.WALL_CLING
 			if parent.velocity.y > 0:
 				parent._frame()
 				return states.AIR_FALLING
 		states.AIR_FALLING:
 			AIRMOVEMENT()
+			if WallCling(direction) == true:
+				return states.WALL_CLING
 			if parent.fastfall:
 				return states.AIR_FASTFALL
 			if parent.velocity.y < 0:
 				parent._frame()
 				return states.AIR_RISING
 		states.AIR_FASTFALL:
+			if WallCling(direction) == true:
+				return states.WALL_CLING
 			AIRMOVEMENT()
 			if parent.velocity.y < 0:
 				parent._frame()
@@ -237,7 +243,7 @@ func get_transition(delta):
 					return states.STAND
 				parent.lag_frames = 0
 		states.WALL_CLING:
-			if parent.frame == 100:  # after a while, stop wall cling
+			if parent.frame == 100 or Input.is_action_pressed("down_%s" % id):  # after a while, stop wall cling
 				return states.AIR_FALLING
 			if Input.is_action_pressed("jump_%s" % id):
 				print("jump pressed on wallcling")
@@ -466,6 +472,7 @@ func WallCling(direction):
 			var collider = parent.WallL.get_collider()
 			parent._frame()
 			parent.velocity.y = 0
+			parent.velocity.x = 0
 			parent.fastfall = false
 			parent.previous_mov_input = 'right'
 			parent.turn('right')
@@ -474,6 +481,7 @@ func WallCling(direction):
 			var collider2 = parent.WallR.get_collider()
 			parent._frame()
 			parent.velocity.y = 0
+			parent.velocity.x = 0
 			parent.fastfall = false
 			parent.previous_mov_input = 'left'
 			parent.turn('left')
