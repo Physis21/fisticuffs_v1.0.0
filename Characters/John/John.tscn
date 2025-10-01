@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://xpa8xrbb1pkb"]
+[gd_scene load_steps=27 format=3 uid="uid://xpa8xrbb1pkb"]
 
 [ext_resource type="Script" path="res://Characters/John/StateMachineJohn.gd" id="1_lswjr"]
 [ext_resource type="Script" path="res://Characters/John/John.gd" id="1_x5q8j"]
@@ -6,7 +6,6 @@
 [ext_resource type="SpriteFrames" uid="uid://cfp0c81aanglg" path="res://Characters/John/JohnSprites.tres" id="3_18oiq"]
 [ext_resource type="Shape2D" uid="uid://bt5vn6uapgora" path="res://Characters/John/cshapes/standing.tres" id="5_n87um"]
 [ext_resource type="Shape2D" uid="uid://civd11ut2m1h1" path="res://Characters/John/cshapes/crouching.tres" id="6_xq0d4"]
-[ext_resource type="Shape2D" uid="uid://drmdpmo8qsh4o" path="res://Characters/John/cshapes/airdash.tres" id="7_iy1qy"]
 
 [sub_resource type="Animation" id="Animation_yb3rw"]
 resource_name = "5JDown"
@@ -566,7 +565,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("7_iy1qy")]
+"values": [ExtResource("5_n87um")]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -578,7 +577,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(19, -4)]
+"values": [Vector2(0, -4)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
