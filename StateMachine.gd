@@ -55,3 +55,12 @@ func get_rightleft(id): # Apply SOCD
 		return 'left'
 	else:
 		return 'neutral'
+		
+func apply_traction(traction):
+	if parent.velocity.x > 0:
+		parent.velocity.x += -traction
+		parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
+	if parent.velocity.x < 0:
+		parent.velocity.x += traction
+		parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+		

@@ -8,6 +8,7 @@ func _ready():
 	add_state('JUMP_SQUAT')
 	add_state('SHORT_HOP')
 	add_state('FULL_HOP')
+	add_state('INIT_DASH')
 	add_state('RUN')
 	add_state('WALK')
 	add_state('TURN')
@@ -61,10 +62,10 @@ func get_transition(delta):
 	
 	match state:
 		states.STAND:
-			if Input.is_action_just_pressed("jump_%s" % id):
+			if Input.is_action_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
-			if Input.is_action_just_pressed("down_%s" % id):
+			if Input.is_action_pressed("down_%s" % id):
 				parent._frame()
 				return states.CROUCH
 			if direction == 'right' and not dash_input:
@@ -81,18 +82,13 @@ func get_transition(delta):
 				parent.velocity.x = parent.RUNSPEED
 				parent._frame()
 				parent.turn('right')
-				return states.RUN
+				return states.INIT_DASH
 			elif direction == 'left' and dash_input:
 				parent.velocity.x = -parent.RUNSPEED
 				parent._frame()
 				parent.turn('left')
-				return states.RUN
-			if parent.velocity.x > 0 and state == states.STAND:
-				parent.velocity.x += -parent.TRACTION * 1
-				parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
-			if parent.velocity.x < 0 and state == states.STAND:
-				parent.velocity.x += parent.TRACTION * 1
-				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+				return states.INIT_DASH
+			apply_traction(parent.TRACTION)
 		states.JUMP_SQUAT:
 			parent.velocity.x = lerpf(parent.velocity.x, 0.0, 0.08)
 			if parent.previous_mov_input == 'neutral':
@@ -125,75 +121,82 @@ func get_transition(delta):
 				parent.velocity.x -= parent.MAXAIRSPEED
 			parent._frame()
 			return states.AIR_RISING
-		states.RUN:
-			if Input.is_action_just_pressed("jump_%s" % id):
+		states.INIT_DASH:
+			if Input.is_action_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
-			if Input.is_action_just_pressed("down_%s" % id):
+			if Input.is_action_pressed("down_%s" % id):
+				parent._frame()
+				return states.CROUCH
+			if parent.frame == parent.DASHFRAMES:
+				return states.RUN
+		states.RUN:
+			if Input.is_action_pressed("jump_%s" % id):
+				parent._frame()
+				return states.JUMP_SQUAT
+			if Input.is_action_pressed("down_%s" % id):
 				parent._frame()
 				return states.CROUCH
 			if direction == 'left':
 				if parent.velocity.x > 0:
+					parent.turn('left')
+					parent.velocity.x = -parent.RUNSPEED
 					parent._frame()
-				parent.velocity.x = -parent.RUNSPEED
-				parent.turn('left')
+					return states.INIT_DASH
+				else:
+					parent.velocity.x = -parent.RUNSPEED
+					parent.turn('left')
 			elif direction == 'right':
 				if parent.velocity.x < 0:
+					parent.turn('right')
+					parent.velocity.x = parent.RUNSPEED
 					parent._frame()
-				parent.velocity.x = parent.RUNSPEED
-				parent.turn('right')
+					return states.INIT_DASH
+				else:
+					parent.velocity.x = parent.RUNSPEED
+					parent.turn('right')
 			else:
 				parent._frame()
 				return states.STAND
 		states.WALK:
-			if Input.is_action_just_pressed("jump_%s" % id):
+			if Input.is_action_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
-			if Input.is_action_just_pressed("down_%s" % id):
+			if Input.is_action_pressed("down_%s" % id):
 				parent._frame()
 				return states.CROUCH
 			if direction == 'right' and dash_input:
 				parent.velocity.x = parent.RUNSPEED
 				parent._frame()
 				parent.turn('right')
-				return states.RUN
+				return states.INIT_DASH
 			elif direction == 'left' and dash_input:
 				parent.velocity.x = -parent.RUNSPEED
 				parent._frame()
 				parent.turn('left')
-				return states.RUN
+				return states.INIT_DASH
 			elif direction == 'neutral':
 				parent._frame()
 				return states.STAND
 		states.CROUCH:
-			if Input.is_action_just_pressed("jump_%s" % id):
+			if Input.is_action_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
 			if Input.is_action_just_released("down_%s" % id):
 				parent._frame()
 				return states.STAND
-			if parent.velocity.x > 0:
-				parent.velocity.x = parent.velocity.x - parent.TRACTION / 2
-				parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
-			if parent.velocity.x < 0:
-				parent.velocity.x = parent.velocity.x + parent.TRACTION / 2
-				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+			apply_traction(parent.TRACTION / 2)
 			if parent.frame == 7:
 				parent._frame()
 				return states.CROUCHING
 		states.CROUCHING:
-			if Input.is_action_just_pressed("jump_%s" % id):
+			if Input.is_action_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
 			if Input.is_action_just_released("down_%s" % id):
 				parent._frame()
 				return states.STAND
-			if parent.velocity.x > 0:
-				parent.velocity.x = parent.velocity.x - parent.TRACTION / 2
-				parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
-			if parent.velocity.x < 0:
-				parent.velocity.x = parent.velocity.x + parent.TRACTION / 2
-				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+			apply_traction(parent.TRACTION / 2)
 		states.AIR:
 			AIRMOVEMENT()
 			if WallCling(direction) == true:
@@ -225,17 +228,12 @@ func get_transition(delta):
 			if parent.frame <= parent.landing_frames + parent.lag_frames:
 				if parent.frame == 1:
 					pass
-				if parent.velocity.x > 0:
-					parent.velocity.x = parent.velocity.x - parent.TRACTION / 2
-					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
-				if parent.velocity.x < 0:
-					parent.velocity.x = parent.velocity.x + parent.TRACTION / 2
-					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+				apply_traction(parent.TRACTION / 2)
 			else:
-				if Input.is_action_just_pressed("jump_%s" % id):
+				if Input.is_action_pressed("jump_%s" % id):
 					parent._frame()
 					return states.JUMP_SQUAT
-				if Input.is_action_just_pressed("down_%s" % id):
+				if Input.is_action_pressed("down_%s" % id):
 					parent.lag_frames = 0
 					parent._frame()
 					return states.CROUCH
@@ -306,12 +304,7 @@ func get_transition(delta):
 			if parent.frame == 0:
 				parent.s5A()
 			if parent.frame >= 1:
-				if parent.velocity.x > 0:
-					parent.velocity.x += -parent.TRACTION
-					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
-				if parent.velocity.x < 0:
-					parent.velocity.x += parent.TRACTION
-					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x,0)
+				apply_traction(parent.TRACTION)
 			if parent.s5A() == true:
 				if Input.is_action_pressed("down_%s" % id):
 					parent._frame()
@@ -323,12 +316,7 @@ func get_transition(delta):
 			if parent.frame == 0:
 				parent.s2A()
 			if parent.frame >= 1:
-				if parent.velocity.x > 0:
-					parent.velocity.x += -parent.TRACTION
-					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
-				if parent.velocity.x < 0:
-					parent.velocity.x += parent.TRACTION
-					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x,0)
+				apply_traction(parent.TRACTION)
 			if parent.s2A() == true:
 				if Input.is_action_pressed("down_%s" % id):
 					parent._frame()
@@ -340,12 +328,7 @@ func get_transition(delta):
 			if parent.frame == 0:
 				parent.s8A()
 			if parent.frame >= 1:
-				if parent.velocity.x > 0:
-					parent.velocity.x += -parent.TRACTION
-					parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
-				if parent.velocity.x < 0:
-					parent.velocity.x += parent.TRACTION
-					parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x,0)
+				apply_traction(parent.TRACTION)
 			if parent.s8A() == true:
 				if Input.is_action_pressed("down_%s" % id):
 					parent._frame()
@@ -376,8 +359,10 @@ func enter_state(new_state, old_state):
 			parent.play_animation('idle')
 		states.WALK:
 			parent.play_animation('5W')
-		states.RUN:
+		states.INIT_DASH:
 			parent.play_animation('5Run')
+		states.RUN:
+			parent.play_animation('6Run')
 		states.JUMP_SQUAT:
 			parent.play_animation('jSquat')
 		states.SHORT_HOP:
@@ -427,7 +412,7 @@ func can_grounded_attack():
 func can_air_attack():
 	if state_includes([states.AIR, states.AIR_RISING, states.AIR_FALLING, states.AIR_FASTFALL, states.WALL_CLING]):
 		return true
-	
+
 func AIRMOVEMENT():
 	var direction = get_rightleft(id)
 	if parent.velocity.y < parent.FALLINGSPEED:
@@ -490,7 +475,7 @@ func Landing():
 			return true
 
 func Falling():
-	if state_includes([states.RUN, states.WALK, states.STAND, states.CROUCH, states.CROUCHING, states.RUN, states.LANDING, states.JUMP_SQUAT]):
+	if state_includes([states.INIT_DASH, states.RUN, states.WALK, states.STAND, states.CROUCH, states.CROUCHING, states.RUN, states.LANDING, states.JUMP_SQUAT]):
 		if not parent.GroundL.is_colliding() and not parent.GroundR.is_colliding():
 			return true
 			
@@ -518,5 +503,5 @@ func WallCling(direction):
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == '5W':
 		parent.play_animation('6W')
-	if anim_name == '5Run':
-		parent.play_animation('6Run')
+	#if anim_name == '5Run':
+		#parent.play_animation('6Run')

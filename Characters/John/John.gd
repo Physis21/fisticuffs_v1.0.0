@@ -45,8 +45,9 @@ var standing_cshape = preload("res://Characters/John/cshapes/standing.tres")
 var crouching_cshape = preload("res://Characters/John/cshapes/crouching.tres")
 
 # JOHN's main attributes
-const WALKSPEED : int = 200 # 200.0 * 2
+const WALKSPEED : int = 300 # 200.0 * 2
 const RUNSPEED : int = 800 # 390 * 2
+const DASHFRAMES : int = 16
 const GRAVITY : int = 1800 * 2
 const JUMPFORCE : int = 900 # 500 * 2
 const MAXJUMPFORCE : int = 1200 # 1000 * 2
