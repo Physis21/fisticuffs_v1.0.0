@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cnx3hv3o6thgv"]
+[gd_scene load_steps=8 format=3 uid="uid://cnx3hv3o6thgv"]
 
+[ext_resource type="Script" uid="uid://ir7368bmpvup" path="res://Stages/test_stage.gd" id="1_mupti"]
 [ext_resource type="Texture2D" uid="uid://cw1sj2trpkjbx" path="res://Stages/crossroad/taiwan_crossroad_day.jpg" id="1_n2buv"]
 [ext_resource type="PackedScene" uid="uid://xpa8xrbb1pkb" path="res://Characters/John/John.tscn" id="2_ea7ob"]
-[ext_resource type="Script" path="res://Stages/StageCamera.gd" id="2_ysrxa"]
+[ext_resource type="Script" uid="uid://crws5c47xmtmb" path="res://Stages/StageCamera.gd" id="2_ysrxa"]
+[ext_resource type="PackedScene" uid="uid://b87jdaxnd48jk" path="res://Menu/PauseMenu/PauseMenu.tscn" id="5_0hfv4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_62erq"]
 size = Vector2(1200, 100)
@@ -11,6 +13,7 @@ size = Vector2(1200, 100)
 size = Vector2(20, 800)
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_mupti")
 
 [node name="TaiwanCrossroadDay" type="Sprite2D" parent="."]
 position = Vector2(573, 453)
@@ -54,3 +57,8 @@ script = ExtResource("2_ysrxa")
 
 [node name="JOHN" parent="." groups=["Players"] instance=ExtResource("2_ea7ob")]
 position = Vector2(338, 679)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("5_0hfv4")]
+visible = false

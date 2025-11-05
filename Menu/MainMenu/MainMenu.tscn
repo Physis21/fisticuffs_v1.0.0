@@ -1,26 +1,55 @@
-[gd_scene load_steps=6 format=3 uid="uid://oeqa0r2lh8wn"]
+[gd_scene load_steps=11 format=3 uid="uid://oeqa0r2lh8wn"]
 
+[ext_resource type="Script" uid="uid://dc01csmib4xbw" path="res://Menu/MainMenu/main_menu.gd" id="1_g1ub3"]
 [ext_resource type="Texture2D" uid="uid://bh3s2fki88t5g" path="res://Menu/MainMenu/NightLab.JPG" id="1_sij70"]
+[ext_resource type="FontFile" uid="uid://cm1rs88ym6v1d" path="res://Fonts/veteran typewriter.ttf" id="2_gxqt3"]
+[ext_resource type="FontFile" uid="uid://du4ndt4r8juir" path="res://Fonts/Dream Orphans.otf" id="4_g1ub3"]
 
-[sub_resource type="SystemFont" id="SystemFont_sij70"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sij70"]
+texture = ExtResource("1_sij70")
 
 [sub_resource type="LabelSettings" id="LabelSettings_7mpft"]
-font = SubResource("SystemFont_sij70")
-font_size = 44
-
-[sub_resource type="SystemFont" id="SystemFont_gxqt3"]
+font = ExtResource("2_gxqt3")
+font_size = 54
 
 [sub_resource type="LabelSettings" id="LabelSettings_g1ub3"]
-font = SubResource("SystemFont_gxqt3")
+font = ExtResource("2_gxqt3")
 font_size = 26
 
-[node name="MainMenu" type="Node2D"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sij70"]
+bg_color = Color(0.7294118, 0.6, 0.6666667, 0.36078432)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 4)
 
-[node name="NightLab" type="Sprite2D" parent="."]
-position = Vector2(589, 373.00003)
-rotation = 1.5707964
-scale = Vector2(0.4, 0.4)
-texture = ExtResource("1_sij70")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxqt3"]
+bg_color = Color(1.3528494, 0.6856222, 1.0192357, 0.77254903)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g1ub3"]
+bg_color = Color(0.73, 0.4818, 0.6100368, 0.41960785)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 4)
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_g1ub3")
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 1202.0
+offset_bottom = 902.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_sij70")
 
 [node name="GameName" type="Label" parent="."]
 offset_left = 722.0
@@ -38,10 +67,33 @@ offset_bottom = 838.0
 text = "By MPhysis"
 label_settings = SubResource("LabelSettings_g1ub3")
 
-[node name="PlayButton" type="Button" parent="."]
-offset_left = 132.0
-offset_top = 217.0
-offset_right = 252.0
-offset_bottom = 248.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 96.0
+offset_top = 182.0
+offset_right = 407.0
+offset_bottom = 738.0
+theme_override_constants/separation = 80
+alignment = 1
+
+[node name="PlayButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_g1ub3")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_sij70")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gxqt3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g1ub3")
 text = "Play test stage"
 icon_alignment = 2
+
+[node name="ExitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_g1ub3")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_sij70")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gxqt3")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g1ub3")
+text = "Exit"
+icon_alignment = 2
+
+[connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
