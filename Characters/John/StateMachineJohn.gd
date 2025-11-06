@@ -4,7 +4,6 @@ var id : int
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	id = get_parent().id
-	print(get_parent().id)
 	# grounded states
 	add_state('STAND')  # idle
 	add_state('JUMP_SQUAT')
@@ -286,14 +285,17 @@ func get_transition(delta):
 			parent.walljumped = true
 			return states.AIR_RISING
 		states.HITSTUN:
-			#print("parent.hitstun = %s" % parent.hitstun)
-			#print("parent.knockback = %s" % parent.knockback)
-			if parent.knockback >= 3:
-				var bounce : KinematicCollision2D = parent.move_and_collide(parent.velocity * delta)
-				if bounce:
-					print("Player %s Bounced on something" % id)
-					parent.velocity = parent.velocity.bounce(bounce.normal) * 0.8
-					parent.hitstun = round(parent.hitstun * 0.8)
+			#if parent.knockback >= 3:
+				#var collision : KinematicCollision2D = parent.move_and_collide(parent.velocity * delta)
+				#print("parent.hitstun = %s" % parent.hitstun)
+				#print("parent.knockback = %s" % parent.knockback)
+				#print("collision = %s" % collision)
+				#if collision:
+					#print("Player %s Bounced on something" % id)
+					#print("Collision normal: ")
+					#print(collision.get_normal())
+					#parent.velocity = parent.velocity.bounce(collision.get_normal()) # * 0.8
+					#parent.hitstun = round(parent.hitstun * 0.8)
 			if parent.velocity.y < 0:
 				parent.velocity.y += parent.vdecay * 0.5 * Engine.time_scale
 				parent.velocity.y = clamp(parent.velocity.y, parent.velocity.y, 0)
@@ -303,7 +305,7 @@ func get_transition(delta):
 			if parent.velocity.x > 0:
 				parent.velocity.x -= (parent.hdecay) * 0.4 * Engine.time_scale
 				parent.velocity.x = clamp(parent.velocity.x, 0, parent.velocity.x)
-			print("parent.velocity.x = %s" % parent.velocity.x)
+			#print("parent.velocity.x = %s" % parent.velocity.x)
 			if parent.frame == parent.hitstun:
 				if parent.knockback >= 24:
 					parent._frame()
@@ -311,7 +313,7 @@ func get_transition(delta):
 				else:
 					parent._frame()
 					return states.AIR
-			elif parent.frame > 60 * 5:
+			elif parent.frame > 60 * 5:  # hard limit to hitstun duration
 				return states.AIR
 				
 		states.GROUND_ATTACK:
