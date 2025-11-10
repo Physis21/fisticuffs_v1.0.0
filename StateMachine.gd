@@ -14,16 +14,16 @@ func _physics_process(delta: float) -> void:
 		if transition != null:
 			set_state(transition)
 
-func state_logic(delta):
+func state_logic(_delta):
 	pass
 	
-func get_transition(delta):
+func get_transition(_delta):
 	return null
 	
-func enter_state(new_state, old_state):
+func enter_state(_new_state, _old_state):
 	pass
 
-func exit_state(old_state, new_state):
+func exit_state(_old_state, _new_state):
 	pass
 	
 func set_state(new_state):
@@ -64,4 +64,6 @@ func apply_traction(traction, mod=1):
 	if parent.velocity.x < 0:
 		parent.velocity.x += applied_traction
 		parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
-		
+
+func is_airborne():
+	return (not parent.GroundL.is_colliding() and not parent.GroundR.is_colliding())

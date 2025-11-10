@@ -63,6 +63,7 @@ var stageScene = null  # initialized in _ready()
 # Preload collision shapes
 var standing_cshape = preload("res://Characters/John/cshapes/standing.tres")
 var crouching_cshape = preload("res://Characters/John/cshapes/crouching.tres")
+var standing_collision_dia = preload("res://Characters/John/cshapes/standingCollisionDia.tres")
 
 # JOHN's main attributes
 const WALKSPEED : int = 300 # 200.0 * 2
@@ -76,8 +77,10 @@ const AIR_ACCEL : int = 10
 const FALLSPEED : int = 60 # 60 * 2
 const FALLINGSPEED : int = 800 # 900 * 2
 const MAXFALLSPEED : int = 800 # 900 * 2
-const TRACTION : int = 400 * 2
-const TRACTION_ATTACK_MOD : float = 0.
+const TRACTION : int = 400 * 2 # acceleration
+const TRACTION_ATTACK : float = 25 # acceleration
+const PUSH_FORCE = 15
+const MIN_PUSH_FORCE = 10
 var effectMarkerPosX : Dictionary = {}
 
 func create_hitbox(width, height, damage, duration, angle, angle_flipper, bk, ks, type, points, hitlag=1):
@@ -99,7 +102,8 @@ func create_hitbox(width, height, damage, duration, angle, angle_flipper, bk, ks
 	
 func updateframes(delta):
 	frame += floor(delta * 60) # to be unaffected by Engine.timescale (instead of +1)
-	wallcling_timer -= floor(delta * 60)
+	if wallcling_timer > 0:
+		wallcling_timer -= floor(delta * 60)
 	wallcling_timer = clampf(wallcling_timer, 0, wallcling_timer)
 	if freezeframes > 0:
 		freezeframes -= floor(delta * 60) 

@@ -18,7 +18,8 @@ func _ready():
 	add_state('LANDING')
 	# hitstun states
 	add_state('HITFREEZE')
-	add_state('HITSTUN')
+	add_state('HITSTUN_AIR')
+	add_state('HITSTUN_GROUND')
 	# airborne states
 	add_state('AIR')
 	add_state('AIR_RISING')
@@ -293,9 +294,23 @@ func get_transition(_delta):
 				parent.velocity.y = kby
 				parent.hdecay = hd
 				parent.vdecay = vd
-				return states.HITSTUN
+				if is_airborne():
+					return states.HITSTUN_AIR
+				else:
+					return states.HITSTUN_GROUND
 			parent.position = pos
-		states.HITSTUN:
+		states.HITSTUN_GROUND:
+			if is_airborne():
+				return states.HITSTUN_AIR
+			hitstun_movement()
+			if parent.frame >= parent.hitstun:
+				if parent.knockback >= 24:
+					parent._frame()
+					return states.STAND
+				else:
+					parent._frame()
+					return states.STAND
+		states.HITSTUN_AIR:
 			#if parent.knockback >= 3:
 				#var collision : KinematicCollision2D = parent.move_and_collide(parent.velocity * delta)
 				#print("parent.hitstun = %s" % parent.hitstun)
@@ -307,15 +322,7 @@ func get_transition(_delta):
 					#print(collision.get_normal())
 					#parent.velocity = parent.velocity.bounce(collision.get_normal()) # * 0.8
 					#parent.hitstun = round(parent.hitstun * 0.8)
-			if parent.velocity.y < 0:
-				parent.velocity.y += parent.vdecay * 0.5 * Engine.time_scale
-				parent.velocity.y = clampf(parent.velocity.y, parent.velocity.y, 0)
-			if parent.velocity.x < 0:
-				parent.velocity.x -= (parent.hdecay) * 0.4 * Engine.time_scale
-				parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
-			if parent.velocity.x > 0:
-				parent.velocity.x -= (parent.hdecay) * 0.4 * Engine.time_scale
-				parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
+			hitstun_movement()
 			if parent.frame >= parent.hitstun:
 				if parent.knockback >= 24:
 					parent._frame()
@@ -323,9 +330,6 @@ func get_transition(_delta):
 				else:
 					parent._frame()
 					return states.AIR
-			elif parent.frame > 60 * 5:  # hard limit to hitstun duration
-				return states.AIR
-				
 		states.GROUND_ATTACK:
 			if Input.is_action_pressed("up_%s" % id):
 				parent._frame()
@@ -349,7 +353,7 @@ func get_transition(_delta):
 			if parent.frame == 0:
 				parent.s5A()
 			if parent.frame >= 1:
-				apply_traction(parent.TRACTION)
+				apply_traction(parent.TRACTION_ATTACK)
 			if parent.s5A() == true:
 				if Input.is_action_pressed("down_%s" % id):
 					parent._frame()
@@ -361,7 +365,7 @@ func get_transition(_delta):
 			if parent.frame == 0:
 				parent.s2A()
 			if parent.frame >= 1:
-				apply_traction(parent.TRACTION)
+				apply_traction(parent.TRACTION_ATTACK)
 			if parent.s2A() == true:
 				if Input.is_action_pressed("down_%s" % id):
 					parent._frame()
@@ -373,7 +377,7 @@ func get_transition(_delta):
 			if parent.frame == 0:
 				parent.s8A()
 			if parent.frame >= 1:
-				apply_traction(parent.TRACTION, parent.TRACTION_ATTACK_MOD)
+				apply_traction(parent.TRACTION_ATTACK)
 			if parent.s8A() == true:
 				if Input.is_action_pressed("down_%s" % id):
 					parent._frame()
@@ -433,9 +437,11 @@ func enter_state(new_state, _old_state):
 		states.CROUCHING:
 			parent.play_animation('crouching')
 		states.HITFREEZE:
+			parent.play_animation('8Hit')
+		states.HITSTUN_AIR:
 			parent.play_animation('j8Hit')
-		states.HITSTUN:
-			parent.play_animation('j8Hit')
+		states.HITSTUN_GROUND:
+			pass # keep HITFREEZE animation
 		states.GROUND_ATTACK:
 			pass
 		states.S5A:
@@ -527,11 +533,11 @@ func Landing():
 
 func Falling():
 	if state_includes([states.INIT_DASH, states.RUN, states.WALK, states.STAND, states.CROUCH, states.CROUCHING, states.RUN, states.LANDING, states.JUMP_SQUAT]):
-		if not parent.GroundL.is_colliding() and not parent.GroundR.is_colliding():
+		if is_airborne():
 			return true
 			
 func WallCling(direction):
-	if not parent.GroundL.is_colliding() and not parent.GroundR.is_colliding() and parent.wallcling_timer == 0:
+	if is_airborne() and parent.wallcling_timer == 0:
 		if parent.WallL.is_colliding() and direction == 'right' and parent.walljumped == false:
 			#var collider = parent.WallL.get_collider()
 			parent._frame()
@@ -567,6 +573,17 @@ func hitfreeze(duration, knockbackVal):
 	hd = knockbackVal[2]
 	vd = knockbackVal[3]
 	pass
+
+func hitstun_movement():
+	if parent.velocity.y < 0:
+		parent.velocity.y += parent.vdecay * 0.5 * Engine.time_scale
+		parent.velocity.y = clampf(parent.velocity.y, parent.velocity.y, 0)
+	if parent.velocity.x < 0:
+		parent.velocity.x -= (parent.hdecay) * 0.4 * Engine.time_scale
+		parent.velocity.x = clampf(parent.velocity.x, parent.velocity.x, 0)
+	if parent.velocity.x > 0:
+		parent.velocity.x -= (parent.hdecay) * 0.4 * Engine.time_scale
+		parent.velocity.x = clampf(parent.velocity.x, 0, parent.velocity.x)
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == '5W':

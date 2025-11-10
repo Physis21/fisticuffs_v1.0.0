@@ -37,11 +37,13 @@ func set_parameters(w,h,dam,dur,a,af,bk,ks,t,p,hit,parent=get_parent()):
 	hitlag_modifier = hit
 	self.position = p
 	update_extents()
-	self.body_entered.connect(hitbox_collide) # Manual connecting
+	self.area_entered.connect(hitbox_collide) # Manual connecting
 	set_physics_process(true)
 	pass
 	
-func hitbox_collide(body):
+func hitbox_collide(area):
+	#print("Collision detected")
+	var body = area.get_parent()
 	if !(body in player_list):
 		player_list.append(body)
 		var charstate

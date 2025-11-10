@@ -5,6 +5,8 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ealqb"]
 
 [node name="Hitbox" type="Area2D"]
+collision_layer = 64
+collision_mask = 32
 script = ExtResource("1_udnj4")
 
 [node name="HitboxShape" type="CollisionShape2D" parent="."]
