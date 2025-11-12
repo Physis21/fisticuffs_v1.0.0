@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://mbl624x0tqrh" path="res://Effects/landing_effect/LandingRipple.tscn" id="4_l2giy"]
 [ext_resource type="Shape2D" uid="uid://bt5vn6uapgora" path="res://Characters/John/cshapes/standing.tres" id="5_n87um"]
 [ext_resource type="Shape2D" uid="uid://civd11ut2m1h1" path="res://Characters/John/cshapes/crouching.tres" id="6_xq0d4"]
-[ext_resource type="Shape2D" uid="uid://don8winht4ejn" path="res://Characters/John/cshapes/standingCollisionDia.tres" id="9_ak7em"]
+[ext_resource type="Shape2D" uid="uid://bodv2scfvjdes" path="res://Characters/John/cshapes/standingCollisionShape.tres" id="9_ak7em"]
 
 [sub_resource type="Animation" id="Animation_yb3rw"]
 resource_name = "5JDown"
@@ -1418,6 +1418,7 @@ libraries = {
 }
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 20)
 shape = ExtResource("9_ak7em")
 
 [node name="HurtBoxes" type="Area2D" parent="."]

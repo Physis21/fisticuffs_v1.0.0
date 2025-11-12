@@ -126,6 +126,7 @@ dev_query={
 2d_physics/layer_3="Floor"
 2d_physics/layer_6="PlayerHurtbox"
 2d_physics/layer_7="PlayerHitBox"
+2d_physics/layer_8="PlayerPush"
 
 [rendering]
 

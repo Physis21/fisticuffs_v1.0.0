@@ -473,7 +473,7 @@ func can_air_attack():
 func AIRMOVEMENT():
 	var direction = get_rightleft(id)
 	if parent.velocity.y < parent.FALLINGSPEED:
-		parent.velocity.y += parent.FALLSPEED
+		parent.velocity.y += parent.FALLACCEL
 	if Input.is_action_pressed("down_%s" % id) and parent.velocity.y > -100 and not parent.fastfall:
 		parent.velocity.y = parent.MAXFALLSPEED
 		parent.fastfall = true

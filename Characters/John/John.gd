@@ -70,17 +70,17 @@ const WALKSPEED : int = 300 # 200.0 * 2
 const RUNSPEED : int = 800 # 390 * 2
 const DASHFRAMES : int = 16
 const GRAVITY : int = 1800 * 2
-const JUMPFORCE : int = 900 # 500 * 2
-const MAXJUMPFORCE : int = 1200 # 1000 * 2
+const JUMPFORCE : int = 900 # actually a speed (pxl / frame)
+const MAXJUMPFORCE : int = 1200 # actually a speed
 const MAXAIRSPEED : int = 300 # 300 * 2
 const AIR_ACCEL : int = 10
-const FALLSPEED : int = 60 # 60 * 2
+const FALLACCEL : int = 60
 const FALLINGSPEED : int = 800 # 900 * 2
-const MAXFALLSPEED : int = 800 # 900 * 2
+const MAXFALLSPEED : int = 800 # fastfall speed
 const TRACTION : int = 400 * 2 # acceleration
 const TRACTION_ATTACK : float = 25 # acceleration
-const PUSH_FORCE = 15
-const MIN_PUSH_FORCE = 10
+const PUSH_FORCE = 200
+#const MIN_PUSH_FORCE = 10
 var effectMarkerPosX : Dictionary = {}
 
 func create_hitbox(width, height, damage, duration, angle, angle_flipper, bk, ks, type, points, hitlag=1):
@@ -153,6 +153,11 @@ func _ready():
 func _physics_process(_delta):
 	$Frames.text = str(frame)
 	selfState = states.text
+	for i in get_slide_collision_count():
+		var c = get_slide_collision(i)
+		if c.get_collider() is CharacterBody2D:
+			print("c normal = %s" % -c.get_normal())
+			c.get_collider().velocity += -c.get_normal() * PUSH_FORCE
 	
 func apply_hit_pause(delta):
 	if hit_pause < hit_pause_dur:
