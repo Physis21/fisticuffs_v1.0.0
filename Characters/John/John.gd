@@ -79,7 +79,7 @@ const FALLINGSPEED : int = 800 # 900 * 2
 const MAXFALLSPEED : int = 800 # fastfall speed
 const TRACTION : int = 400 * 2 # acceleration
 const TRACTION_ATTACK : float = 25 # acceleration
-const PUSH_FORCE = 200
+const PUSH_FORCE = 100
 #const MIN_PUSH_FORCE = 10
 var effectMarkerPosX : Dictionary = {}
 
@@ -147,7 +147,7 @@ func _physics_process(_delta):
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
 		if c.get_collider() is CharacterBody2D:
-			print("c normal = %s" % -c.get_normal())
+			print("c normal = %s" % c.get_normal())
 			c.get_collider().velocity += -c.get_normal() * PUSH_FORCE
 	
 func apply_hit_pause(delta):

@@ -85,6 +85,7 @@ func get_transition(_delta):
 				Movement.grounded_move_x(parent, parent.RUNSPEED, direction)
 				parent._frame()
 				parent.turn(direction.val)
+				parent.previous_mov_input.set_val(direction.val)
 				return states.INIT_DASH
 			apply_traction(parent.TRACTION)
 		states.JUMP_SQUAT:
@@ -114,13 +115,16 @@ func get_transition(_delta):
 			parent._frame()
 			return states.AIR_RISING
 		states.INIT_DASH:
+			Movement.grounded_move_x(parent, parent.RUNSPEED, parent.previous_mov_input)
 			if Input.is_action_pressed("jump_%s" % id):
 				parent._frame()
 				return states.JUMP_SQUAT
 			if Input.is_action_pressed("down_%s" % id):
 				parent._frame()
+				parent.previous_mov_input.set_val('neutral')
 				return states.CROUCH
 			if parent.frame == parent.DASHFRAMES:
+				parent.previous_mov_input.set_val('neutral')
 				return states.RUN
 		states.RUN:
 			if Input.is_action_pressed("jump_%s" % id):
@@ -136,6 +140,7 @@ func get_transition(_delta):
 					pass
 				elif sign(parent.velocity.x) != direction.xmult:
 					parent._frame()
+					parent.previous_mov_input.set_val(direction.val)
 					return states.INIT_DASH
 			else:
 				parent._frame()
@@ -147,10 +152,14 @@ func get_transition(_delta):
 			if Input.is_action_pressed("down_%s" % id):
 				parent._frame()
 				return states.CROUCH
+			if direction.is_rightorleft():
+				Movement.grounded_move_x(parent, parent.WALKSPEED, direction)
+				parent.turn(direction.val)
 			if direction.is_rightorleft() and dash_input:
 				Movement.grounded_move_x(parent, parent.RUNSPEED, direction)
 				parent._frame()
 				parent.turn(direction.val)
+				parent.previous_mov_input.set_val(direction.val)
 				return states.INIT_DASH
 			elif direction.val == 'neutral':
 				parent._frame()

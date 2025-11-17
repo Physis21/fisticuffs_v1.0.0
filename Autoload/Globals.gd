@@ -2,7 +2,7 @@ extends Node
 
 # Functions
 
-func clampf_abs(x):
+func clampf_abs_zero(x):
 	if x > 0:
 		return clampf(x, 0, x)
 	elif x < 0:
