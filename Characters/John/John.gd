@@ -144,11 +144,11 @@ func _ready():
 func _physics_process(_delta):
 	$Frames.text = str(frame)
 	selfState = states.text
-	for i in get_slide_collision_count():
-		var c = get_slide_collision(i)
-		if c.get_collider() is CharacterBody2D:
-			print("c normal = %s" % c.get_normal())
-			c.get_collider().velocity += -c.get_normal() * PUSH_FORCE
+	#for i in get_slide_collision_count():
+		#var c = get_slide_collision(i)
+		#if c.get_collider() is CharacterBody2D:
+			#print("c normal = %s" % c.get_normal())
+			#c.get_collider().velocity += -c.get_normal() * PUSH_FORCE
 	
 func apply_hit_pause(delta):
 	if hit_pause < hit_pause_dur:

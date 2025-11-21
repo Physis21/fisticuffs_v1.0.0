@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://vxm5horksa0s"]
+
+[ext_resource type="Script" uid="uid://bbb65lle5canr" path="res://CharCollisionBox/pushbox.gd" id="1_qy0x4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gueai"]
+
+[node name="Pushbox" type="Area2D"]
+script = ExtResource("1_qy0x4")
+
+[node name="PushboxShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_gueai")
