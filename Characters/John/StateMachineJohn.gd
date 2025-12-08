@@ -516,7 +516,7 @@ func WallCling(direction : Movement.InptDirection):
 			#var collider = parent.WallL.get_collider()
 			#var collider2 = parent.WallR.get_collider()
 			parent._frame()
-			parent.wallcling_timer = parent.wallcling_cooldown
+			parent.wallcling_timer = parent.WALLCLING_COOLDOWN
 			parent.velocity.y = 0
 			parent.velocity.x = 0
 			parent.fastfall = false

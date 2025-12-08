@@ -1,7 +1,7 @@
 [gd_scene load_steps=34 format=3 uid="uid://xpa8xrbb1pkb"]
 
 [ext_resource type="Script" uid="uid://cflj6fxo0lf1" path="res://Characters/John/StateMachineJohn.gd" id="1_lswjr"]
-[ext_resource type="Script" uid="uid://cfe13ccuw4fqv" path="res://Characters/John/John.gd" id="1_x5q8j"]
+[ext_resource type="Script" uid="uid://cfe13ccuw4fqv" path="res://Characters/John/john.gd" id="1_x5q8j"]
 [ext_resource type="PackedScene" uid="uid://l0seyh855irn" path="res://Hitbox/hitbox.tscn" id="2_8jr0u"]
 [ext_resource type="PackedScene" uid="uid://vxm5horksa0s" path="res://Pushbox/pushbox.tscn" id="2_jgt4k"]
 [ext_resource type="SpriteFrames" uid="uid://cfp0c81aanglg" path="res://Characters/John/JohnSprites.tres" id="3_18oiq"]

@@ -4,31 +4,25 @@ class_name John extends CharacterBody2D
 # from fox stats
 
 # JOHN's main attributes
-## Walking speed (px/frame).
-const WALKSPEED : int = 300 # 200.0 * 2
-## Running speed (px/frame).
-const RUNSPEED : int = 800 # 390 * 2
-## Duration (in frames) of the dash animation
-const DASHFRAMES : int = 16
-## Gravity constant (
-const GRAVITY : int = 1800 * 2
-const JUMPFORCE : int = 900 # actually a speed (pxl / frame)
-const MAXJUMPFORCE : int = 1200 # actually a speed
-const MAXAIRSPEED : int = 300 # 300 * 2
-const AIR_ACCEL : int = 10
-const FALLACCEL : int = 60
-const FALLINGSPEED : int = 800 # 900 * 2
-const MAXFALLSPEED : int = 800 # fastfall speed
-const TRACTION : int = 400 * 2 # acceleration
-const TRACTION_ATTACK : float = 25 # acceleration
-const PUSH_FORCE = 100
+const WALKSPEED : int = 300 ## Walking speed (px/frame).
+const RUNSPEED : int = 800 ## Running speed (px/frame).
+const DASHFRAMES : int = 16 ## Duration (in frames) of the dash animation.
+const GRAVITY : int = 1800 * 2 ## Gravity constant.
+const JUMPFORCE : int = 900 ## Vertical speed induced by short hop (px/frame).
+const MAXJUMPFORCE : int = 1200 ## Vertical speed induced by jump (px/frame).
+const MAXAIRSPEED : int = 300 ## Maximum horizontal air speed.
+const AIR_ACCEL : int = 10 ## Maximum horizontal air acceleration.
+const FALLACCEL : int = 60 ## Falling acceleration (gravity) of the character.
+const FALLINGSPEED : int = 800 ## Falling speed
+const MAXFALLSPEED : int = 800 ## Fastfall falling speed
+const TRACTION : int = 400 * 2 ## Decelleration due to grounded traction (px/frame²)
+const TRACTION_ATTACK : float = 25 ## Traction due to grounded attacks (px/frame²)
+const PUSH_FORCE = 100 
 #const MIN_PUSH_FORCE = 10
 
 # Global variables
-## Frame counter. Is added 1 each _physics_process()
-var frame = 0
-## Direction of character
-var dir = Movement.CharDirection.new()
+var frame = 0 ## Frame counter. Is added 1 each _physics_process().
+var dir = Movement.CharDirection.new() ## Direction of character.
 
 # Attributes
 ## Character identifier, in order to differentiate simultaneous characters.
@@ -37,22 +31,24 @@ var dir = Movement.CharDirection.new()
 @export var percentage = 20
 ## Character health, starts at maximum by default.
 @export var health = 1000
-## Number of times the character must be KO'ed to 
-@export var stocks = 3
-@export var weight = 100
-var freezeframes = 0
+## Number of times the character must be KO'ed to.
+@export var stocks : int = 3
+## Weight of the character (used to compute knockback values).
+@export var weight : float = 100.
+## Number of frames the character is frozen. Is updated when struck by hitbox.
+var freezeframes : int= 0
 
 # Buffers
-var wallcling_max = 90
-var wallcling_cooldown = 30
-var wallcling_timer = 0
+var wallcling_max = 90 ## Maximum number of frames the wallcling can be held.
+const WALLCLING_COOLDOWN = 30 ## Number of frames during which wallcling is deactivated after walljump.
+var wallcling_timer = 0 ## Timer for wallcling after a walljump.
 
 # Knockback
-var hdecay
-var vdecay
-var knockback
-var hitstun
-var connected: bool
+var hdecay : float ## Knockback horizontal decay.
+var vdecay : float ## Knockback vertical decay.
+var knockback : float ## Knockback value.
+var hitstun : int ## Number of frames the character is stuck in hitstun.
+var connected: bool ## Checks whether an attack has connected.
 
 # Ground Variables
 
@@ -64,12 +60,13 @@ var lag_frames:  int = 0
 var landing_frames : int = 3
 var previous_mov_input = Movement.InptDirection.new()
 
-# Pushbox
+## Pushbox
 @export var pushbox: PackedScene
 
-# Hitboxes
+## Character hitboxes
 @export var hitbox: PackedScene
-var selfState
+## State of the character
+var selfState : String
 
 # Temporary variables
 var hit_pause = 0
@@ -107,7 +104,19 @@ func create_pushbox(width, height, points):
 	return pushbox_instance
 	
 
-func create_hitbox(width, height, damage, duration, angle, angle_flipper, bk, ks, type, points, hitlag=1):
+func create_hitbox(
+	width : int,
+	height : int,
+	damage : float, 
+	duration : int, 
+	angle : int, 
+	angle_flipper : int, 
+	bk : int, 
+	ks : float, 
+	type : String, 
+	points : Vector2, 
+	hitlag : float = 1.
+	) -> Hitbox:
 	var hitbox_instance = hitbox.instantiate()
 	self.add_child(hitbox_instance)
 	var flip_x_points = Vector2(dir.xmult * points.x, points.y)
@@ -117,17 +126,19 @@ func create_hitbox(width, height, damage, duration, angle, angle_flipper, bk, ks
 		bk, ks, type, flip_x_points, hitlag
 		)
 	return hitbox_instance
-	
-func updateframes(delta):
+
+## Updates counters such as [frame].
+func updateframes(delta : float) -> void:
 	frame += floor(delta * 60) # to be unaffected by Engine.timescale (instead of +1)
 	if wallcling_timer > 0:
 		wallcling_timer -= floor(delta * 60)
 	wallcling_timer = clampf(wallcling_timer, 0, wallcling_timer)
 	if freezeframes > 0:
 		freezeframes -= floor(delta * 60) 
-	freezeframes = clampf(freezeframes, 0, freezeframes)
+	freezeframes = clampi(freezeframes, 0, freezeframes)
 
-func turn(dirVal : String):
+## Turns the character sprite and effect Markers.
+func turn(dirVal : String) -> void:
 	# character faces right by default
 	var flip = true
 	dir.set_val(dirVal)
@@ -139,11 +150,13 @@ func turn(dirVal : String):
 
 func _frame():
 	frame = 0
-	
-func play_animation(animation_name):
+
+## Play a character animation.
+func play_animation(animation_name : String) -> void:
 	anim.play(animation_name)
 
-func play_effect(effect_name):
+## Play a character effect.
+func play_effect(effect_name : String) -> void:
 	match effect_name:
 		'DashDust':
 			var DashDustInst = DashDust.instantiate()

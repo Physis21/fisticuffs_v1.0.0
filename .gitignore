@@ -16,6 +16,7 @@ mono_crash.*.json
 
 # Plugins
 addons/
+GDQuest_GDScript_formatter
 
 # Ignore notes
 /Notes

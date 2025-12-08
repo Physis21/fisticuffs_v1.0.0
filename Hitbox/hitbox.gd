@@ -1,27 +1,42 @@
 class_name Hitbox extends Area2D
 
-@export var width = 300
-@export var height = 400
-@export var damage = 50
-@onready var angle = 0
-@onready var angle_flipper = 0  # default value
-@onready var base_kb = 100
-@export var kb_scaling = 1
-@export var duration = 60
-@export var hitlag_modifier = 1
-@export var type = 'normal'
-@onready var hitbox = get_node("HitboxShape")
-@onready var parentState = get_parent().selfState
-var framez = 0.0
-var player_list = []  # list of player characters this hitbox cannot collide with
-var knockbackVal
-var kbToVelocity = 5
-var decayFactor = 0.051
 
-const DEGTORAD = PI / 180
+@export var width : int = 300 ## Width of hitbox rectangle shape.
+@export var height : int  = 400 ## Height of hitbox rectangle shape (px).
+@export var damage : float  = 10. ## Damage caused by hitbox (px).
+@onready var angle : int = 0 ## Angle at which the hitbox sends (degrees).
+@onready var angle_flipper : int = 0  ## Value which defines the behavior of the knockback angle with respect to the parent player. Default value: 0.
+@onready var base_kb : int = 100 ## Base knockback speed (px/frame), which is then modified by [kbToVelocity].
+@export var kb_scaling : float = 1 ## Growth of the knockback with respect to percentage.
+@export var duration : int = 60 ## Duration of the hitbox (frames).
+@export var hitlag_modifier : float = 1. ## Modifies the hitlag time.
+@export var type : String = "normal" ## Type of hitbox.
+@onready var hitbox : CollisionShape2D = get_node("HitboxShape") ## [CollisionShape2D] child node of the hitbox.
+@onready var parentState : String = get_parent().selfState ## State of the parent.
 
+var framez : int = 0 ## Counts number of frames elapsed since instanciation.
+var player_list : Array = [] ## List of player characters this hitbox cannot collide with.
+var knockbackVal : float ## Knockback value after damage calculation.
+var kbToVelocity : float = 5. ## Knockback to velocity (px/frame) converter.
+var decayFactor : float = 0.051 ## Decay factor of knockback.
 
-func set_parameters(w,h,dam,dur,a,af,bk,ks,t,p,hit,parent=get_parent()):
+const DEGTORAD : float = PI / 180 ## Degree to radian converter.
+
+## Sets the hitbox parameters. Is usually called after the hitbox is instanced 
+func set_parameters(
+	w : int, ## Width
+	h : int, ## Height
+	dam : float, ## Damage
+	dur : int, ## Duration
+	a : int, ## Angle
+	af : int, ## Angle flipper
+	bk : int, ## Base knockback
+	ks : float, ## Knockback scaling
+	t : String, ## Type of knockback
+	p : Vector2, ## Position of hitbox
+	hit : float, ## Hitlag modifier
+	parent : CharacterBody2D=get_parent() ## Parent character
+	) -> void:
 	self.position = Vector2(0,0)
 	player_list.append(parent)
 	player_list.append(self)  # just in case
@@ -40,8 +55,9 @@ func set_parameters(w,h,dam,dur,a,af,bk,ks,t,p,hit,parent=get_parent()):
 	self.area_entered.connect(hitbox_collide) # Manual connecting
 	set_physics_process(true)
 	pass
-	
-func hitbox_collide(area):
+
+## Applies hit state to opposing character, along with hitstun and hit freeze
+func hitbox_collide(area: Area2D) -> void:
 	#print("Collision detected")
 	var body = area.get_parent()
 	if !(body in player_list):
@@ -67,8 +83,9 @@ func hitbox_collide(area):
 		get_parent().hit_pause_dur = duration - framez
 		get_parent().temp_pos = get_parent().position
 		get_parent().temp_vel = get_parent().velocity
-	
-func update_extents():
+
+## Update the HitboxShape extents
+func update_extents() -> void:
 	hitbox.shape.extents = Vector2(width, height)
 	
 func _ready() -> void:
@@ -77,7 +94,7 @@ func _ready() -> void:
 	#print("knockback = %s" % getKnockback(20, 100, 100, 100, 1, 1))
 	pass
 
-func _physics_process(delta: float):
+func _physics_process(delta: float) -> void:
 	if framez < duration:
 		framez += floor(delta * 60)
 	elif framez == duration:
@@ -89,19 +106,24 @@ func _physics_process(delta: float):
 		queue_free()
 		return 
 
-func getHitstun(kbVal):
+## Converts a knockback value to a hitstun value
+func getHitstun(kbVal : float) -> int:
 	return floor(kbVal / 10)
 
 ## Get hitlag from damage and hitlag modifier
-func getHitlag(dam, hit):
+func getHitlag(dam : float, hit : float) -> int:
 	return floor(floor(floor(dam / 3) + 4) * hit)
 
 # These variables are maybe not necessary
-@export var weight = 100
-@export var ratio = 1
-@export var percentage = 20 # default for stamina mode in Melee
+## Sample weight of opposing character.
+@export var weight : float = 100
+## Sample ratio of the knockback value after calculation.
+@export var ratio : float  = 1
+## Sample percentage of opposing character. 20 is the default for stamina mode in Melee
+@export var percentage : float = 20
 
-func getKnockback(p, d, w, bk, ks, r):
+## Returns the knockback value
+func getKnockback(p : float, d : float, w : float, bk : int, ks : float, r : float) -> float:
 	percentage = p
 	damage = d
 	weight = w

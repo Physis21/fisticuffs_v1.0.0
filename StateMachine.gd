@@ -3,7 +3,7 @@ class_name StateMachine
 
 var state = null : set = set_state
 var previous_state = null
-var states = {}
+var states : Dictionary = {}
 
 @onready var parent = get_parent()
 
@@ -26,7 +26,7 @@ func enter_state(_new_state, _old_state):
 func exit_state(_old_state, _new_state):
 	pass
 	
-func set_state(new_state):
+func set_state(new_state : String):
 	previous_state = state
 	state = new_state
 	if previous_state != null:
@@ -45,8 +45,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	pass
-		
-func apply_traction(traction, mod=1):
+
+## Decelerate character based on his current traction (with modifier)
+func apply_traction(traction : int, mod : float =1.):
 	var applied_traction = traction * mod
 	if parent.velocity.x > 0:
 		parent.velocity.x += -applied_traction
