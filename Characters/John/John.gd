@@ -21,16 +21,16 @@ const PUSH_FORCE = 100
 #const MIN_PUSH_FORCE = 10
 
 # Global variables
-var frame = 0 ## Frame counter. Is added 1 each _physics_process().
-var dir = Movement.CharDirection.new() ## Direction of character.
+var frame : int = 0 ## Frame counter. Is added 1 each _physics_process().
+var dir : Movement.CharDirection = Movement.CharDirection.new() ## Direction of character.
 
 # Attributes
 ## Character identifier, in order to differentiate simultaneous characters.
 @export var id : int
 ## The higher the percentage, the further the character is knocked back after an attack.
-@export var percentage = 20
+@export var percentage : float = 20
 ## Character health, starts at maximum by default.
-@export var health = 1000
+@export var health : float = 1000
 ## Number of times the character must be KO'ed to.
 @export var stocks : int = 3
 ## Weight of the character (used to compute knockback values).
@@ -39,9 +39,9 @@ var dir = Movement.CharDirection.new() ## Direction of character.
 var freezeframes : int= 0
 
 # Buffers
-var wallcling_max = 90 ## Maximum number of frames the wallcling can be held.
-const WALLCLING_COOLDOWN = 30 ## Number of frames during which wallcling is deactivated after walljump.
-var wallcling_timer = 0 ## Timer for wallcling after a walljump.
+var wallcling_max : int = 90 ## Maximum number of frames the wallcling can be held.
+const WALLCLING_COOLDOWN : int= 30 ## Number of frames during which wallcling is deactivated after walljump.
+var wallcling_timer : int = 0 ## Timer for wallcling after a walljump.
 
 # Knockback
 var hdecay : float ## Knockback horizontal decay.
@@ -132,7 +132,7 @@ func updateframes(delta : float) -> void:
 	frame += floor(delta * 60) # to be unaffected by Engine.timescale (instead of +1)
 	if wallcling_timer > 0:
 		wallcling_timer -= floor(delta * 60)
-	wallcling_timer = clampf(wallcling_timer, 0, wallcling_timer)
+	wallcling_timer = clampi(wallcling_timer, 0, wallcling_timer)
 	if freezeframes > 0:
 		freezeframes -= floor(delta * 60) 
 	freezeframes = clampi(freezeframes, 0, freezeframes)

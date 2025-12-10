@@ -133,7 +133,8 @@ func getKnockback(p : float, d : float, w : float, bk : int, ks : float, r : flo
 	# require 0.4% of SSBM knockback
 	return ((((((percentage / 10) + (percentage * damage / 20)) * 1.4 * (200 / (weight + 100))) + 18) * kb_scaling) + base_kb) * ratio
 
-func getHorizontalDecay(a): # The rate at which the opponent will slow down after knockback
+## Returns the rate at which the opponent will slow down after knockback
+func getHorizontalDecay(a): 
 	var decay = decayFactor * cos(a * DEGTORAD) # Rate of decay is 0.051. To get the Horizontal rate, multily by cos of angle
 	decay = round(decay * 100000) / 100000 # Round to a whole number
 	decay = decay * 1000 # Enlarge the rate of decay
