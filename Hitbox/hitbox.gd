@@ -1,12 +1,12 @@
 class_name Hitbox extends Area2D
 
 
-@export var width : int = 300 ## Width of hitbox rectangle shape.
-@export var height : int  = 400 ## Height of hitbox rectangle shape (px).
+@export var width : float = 300 ## Width of hitbox rectangle shape.
+@export var height : float  = 400 ## Height of hitbox rectangle shape (px).
 @export var damage : float  = 10. ## Damage caused by hitbox (px).
-@onready var angle : int = 0 ## Angle at which the hitbox sends (degrees).
+@onready var angle : float = 0 ## Angle at which the hitbox sends (degrees).
 @onready var angle_flipper : int = 0  ## Value which defines the behavior of the knockback angle with respect to the parent player. Default value: 0.
-@onready var base_kb : int = 100 ## Base knockback speed (px/frame), which is then modified by [kbToVelocity].
+@onready var base_kb : float = 100 ## Base knockback speed (px/frame), which is then modified by [kbToVelocity].
 @export var kb_scaling : float = 1 ## Growth of the knockback with respect to percentage.
 @export var duration : int = 60 ## Duration of the hitbox (frames).
 @export var hitlag_modifier : float = 1. ## Modifies the hitlag time.
@@ -79,8 +79,8 @@ func hitbox_collide(area: Area2D) -> void:
 		body._frame()
 		#print("knockbackVal = %s" % knockbackVal)
 		
-		Globals.hitstun_slowdown(getHitlag(damage, hitlag_modifier), getHitlag(damage, hitlag_modifier)/60)
-		get_parent().hit_pause_dur = duration - framez
+		Globals.hitstun_slowdown(getHitlag(damage, hitlag_modifier))
+		get_parent().hit_pause_dur = duration - framez # Hit pause lasts enough so that the hit retains the same frame advantage no matter when it hits.
 		get_parent().temp_pos = get_parent().position
 		get_parent().temp_vel = get_parent().velocity
 
@@ -123,7 +123,7 @@ func getHitlag(dam : float, hit : float) -> int:
 @export var percentage : float = 20
 
 ## Returns the knockback value
-func getKnockback(p : float, d : float, w : float, bk : int, ks : float, r : float) -> float:
+func getKnockback(p : float, d : float, w : float, bk : float, ks : float, r : float) -> float:
 	percentage = p
 	damage = d
 	weight = w
@@ -166,7 +166,7 @@ func apply_angle_flipper(body_vel: Vector2, body_position: Vector2, hdecay=0, vd
 		angleWithDir = angle
 	elif get_parent().dir.val == 'left':
 		xangle = body_position.angle_to_point(get_parent().global_position) / DEGTORAD
-		angleWithDir = (180 - angle) % 360
+		angleWithDir = fmod(180. - angle, 360) 
 	match angle_flipper:
 		0:
 			body_vel.x = (getHorizontalVelocity(knockbackVal, angleWithDir))
@@ -204,7 +204,7 @@ func apply_angle_flipper_v0(body):
 		angleWithDir = angle
 	elif get_parent().dir.val == 'left':
 		xangle = body.global_position.angle_to_point(get_parent().global_position) / DEGTORAD
-		angleWithDir = (180 - angle) % 360
+		angleWithDir = fmod(180. - angle, 360)
 	match angle_flipper:
 		0:
 			body.velocity.x = (getHorizontalVelocity(knockbackVal, angleWithDir))

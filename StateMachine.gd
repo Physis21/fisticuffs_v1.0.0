@@ -1,8 +1,8 @@
 extends Node
 class_name StateMachine
 
-var state = null : set = set_state
-var previous_state = null
+var state : String = "NULL" : set = set_state
+var previous_state : String = "NULL"
 var states : Dictionary = {}
 
 @onready var parent = get_parent()

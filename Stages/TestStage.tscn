@@ -10,7 +10,7 @@
 size = Vector2(1200, 100)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bqknq"]
-size = Vector2(30, 800)
+size = Vector2(100, 800)
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_mupti")
@@ -32,11 +32,11 @@ debug_color = Color(0, 0.257052, 0.6592, 0.42)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
-position = Vector2(14, 400)
+position = Vector2(0, 400)
 shape = SubResource("RectangleShape2D_bqknq")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls"]
-position = Vector2(1185, 400)
+position = Vector2(1200, 400)
 shape = SubResource("RectangleShape2D_bqknq")
 
 [node name="Camera2D" type="Camera2D" parent="."]

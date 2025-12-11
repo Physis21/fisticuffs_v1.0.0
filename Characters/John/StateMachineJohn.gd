@@ -2,7 +2,7 @@ class_name StateMachineJohn extends StateMachine
 
 ## John's state machine.
 
-var id : int
+var id : int ## Gets initialized to parent id in _ready()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -50,7 +50,7 @@ func state_logic(delta):
 	
 func get_transition(_delta):
 	parent.move_and_slide()
-	parent.states.text = str(state)
+	parent.displayedState.text = str(state)
 	var dirVal = Movement.get_dir_val(id)
 	var direction = Movement.InptDirection.new()
 	direction.set_val(dirVal)
@@ -379,7 +379,7 @@ func get_transition(_delta):
 				
 
 func enter_state(new_state, _old_state):
-	parent.states.text = str(new_state)
+	parent.displayedState.text = str(new_state)
 	match new_state:
 		states.STAND:
 			parent.play_animation('idle')

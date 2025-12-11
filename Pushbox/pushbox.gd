@@ -1,15 +1,14 @@
 class_name Pushbox extends Area2D
 ### Implements collision between player characters (not floors and walls).
 
-@export var width : int = 300 ## Width of [CollisionShape2D] and [ShapeCast2D] rectangle.
-@export var height : int = 400 ## Height of [CollisionShape2D] and [ShapeCast2D] rectangle.
+@export var width : float = 300 ## Width of [CollisionShape2D] and [ShapeCast2D] rectangle.
+@export var height : float = 400 ## Height of [CollisionShape2D] and [ShapeCast2D] rectangle.
 @onready var pushbox : CollisionShape2D = get_node("PushboxShape")
 @onready var shapecast : ShapeCast2D = get_node("ShapeCast2D")
 @onready var parentState : String = get_parent().selfState ## State of character (not that of its state machine).
 
 var right_side_xpos : float = self.global_position.x + width ## X position of [ShapeCast2D] right side.
 var left_side_xpos : float = self.global_position.x - width ## X position of [ShapeCast2D] left side.
-
 var player_list : Array = []  ## List of player characters this pushox cannot collide with.
 
 func _ready() -> void:
@@ -23,7 +22,8 @@ func _physics_process(_delta: float) -> void:
 		var area = shapecast.get_collider(0)
 		pushbox_overlap(area)
 
-func set_parameters(w, h, p, parent=get_parent()):
+## Sets pushbox width, height, position.
+func set_parameters(w : float, h : float, p : Vector2, parent=get_parent()):
 	player_list.append(parent)
 	player_list.append(self)  # just in case
 	self.position = Vector2(0,0)
@@ -43,14 +43,20 @@ func pushbox_overlap(area : Area2D) -> void:
 		var right_gap = abs(right_side_xpos - area_left_side_xpos)
 		var left_gap = abs(left_side_xpos - area_right_side_xpos)
 		var adjustement
-		if right_gap <= left_gap:
-			adjustement = -right_gap / 2
-		elif right_gap >= left_gap:
-			adjustement = left_gap / 2
-		print("Old global position: %s" % get_parent().global_position.x)
-		get_parent().position.x += adjustement
-		print("New global position: %s" % get_parent().global_position.x)
-		body.position.x -= adjustement
+		if right_gap < left_gap:
+			adjustement = -right_gap
+		elif right_gap > left_gap:
+			adjustement = left_gap
+		else: # parent is basically on top of body, exactly at center
+			if get_parent().dir.val == "left":
+				adjustement = -right_gap
+			else:
+				adjustement = left_gap
+		# Apply weight
+		var parent_weight = get_parent().weight
+		var weighted_adjustement = adjustement * parent_weight / (body.weight + parent_weight)
+		get_parent().position.x += adjustement - weighted_adjustement
+		body.position.x -= weighted_adjustement
 		
 
 func update_extents():

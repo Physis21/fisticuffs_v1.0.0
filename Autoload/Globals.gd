@@ -1,4 +1,5 @@
 extends Node
+## Contains functions used throughout the project
 
 ## Clamp a float absolute value between its max absolute value and 0
 func clampf_abs_zero(x: float) -> float:
@@ -10,9 +11,9 @@ func clampf_abs_zero(x: float) -> float:
 		return 0.
 
 ## Apply engine time slowing during hitstun
-func hitstun_slowdown(mod, duration):
-	# mod is the hitlag of the attack
-	Engine.time_scale = mod / 50
-	print("Engine time scale = %s" % Engine.time_scale)
+func hitstun_slowdown(hitlag : int) -> void:
+	var duration : float = float(hitlag) / 60
+	Engine.time_scale = float(hitlag) / 50
+	print("Engine time scale = %f" % Engine.time_scale)
 	await get_tree().create_timer(duration * Engine.time_scale).timeout
 	Engine.time_scale = 1

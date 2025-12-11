@@ -1,6 +1,6 @@
 [gd_scene load_steps=34 format=3 uid="uid://xpa8xrbb1pkb"]
 
-[ext_resource type="Script" uid="uid://cflj6fxo0lf1" path="res://Characters/John/StateMachineJohn.gd" id="1_lswjr"]
+[ext_resource type="Script" uid="uid://cflj6fxo0lf1" path="res://Characters/John/stateMachineJohn.gd" id="1_lswjr"]
 [ext_resource type="Script" uid="uid://cfe13ccuw4fqv" path="res://Characters/John/john.gd" id="1_x5q8j"]
 [ext_resource type="PackedScene" uid="uid://l0seyh855irn" path="res://Hitbox/hitbox.tscn" id="2_8jr0u"]
 [ext_resource type="PackedScene" uid="uid://vxm5horksa0s" path="res://Pushbox/pushbox.tscn" id="2_jgt4k"]
@@ -1424,6 +1424,7 @@ position = Vector2(0, 20)
 shape = ExtResource("9_ak7em")
 
 [node name="HurtBoxes" type="Area2D" parent="."]
+visible = false
 collision_layer = 32
 collision_mask = 64
 

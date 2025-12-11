@@ -7,7 +7,6 @@ class_name John extends CharacterBody2D
 const WALKSPEED : int = 300 ## Walking speed (px/frame).
 const RUNSPEED : int = 800 ## Running speed (px/frame).
 const DASHFRAMES : int = 16 ## Duration (in frames) of the dash animation.
-const GRAVITY : int = 1800 * 2 ## Gravity constant.
 const JUMPFORCE : int = 900 ## Vertical speed induced by short hop (px/frame).
 const MAXJUMPFORCE : int = 1200 ## Vertical speed induced by jump (px/frame).
 const MAXAIRSPEED : int = 300 ## Maximum horizontal air speed.
@@ -36,7 +35,7 @@ var dir : Movement.CharDirection = Movement.CharDirection.new() ## Direction of 
 ## Weight of the character (used to compute knockback values).
 @export var weight : float = 100.
 ## Number of frames the character is frozen. Is updated when struck by hitbox.
-var freezeframes : int= 0
+var freezeframes : int = 0
 
 # Buffers
 var wallcling_max : int = 90 ## Maximum number of frames the wallcling can be held.
@@ -53,39 +52,35 @@ var connected: bool ## Checks whether an attack has connected.
 # Ground Variables
 
 # Air Variables
-var walljumped : bool = false
-var fastfall : bool = false
-var jump_squat : int = 5
-var lag_frames:  int = 0
-var landing_frames : int = 3
-var previous_mov_input = Movement.InptDirection.new()
+var walljumped : bool = false ## True if the character has walljumped while airborne. Becomes false again after they touch the ground.
+var fastfall : bool = false ## True if the character has fastfalled while airborne. Becomes false again after they touch the ground.
+var jump_squat : int = 5 ## Number of frames of jump squat.
+var lag_frames:  int = 0 ## Number of lag frames after an action.
+var landing_frames : int = 3 ## Number of landing lag frames.
+var previous_mov_input = Movement.InptDirection.new() ## Previous movement input.
 
-## Pushbox
-@export var pushbox: PackedScene
-
-## Character hitboxes
-@export var hitbox: PackedScene
-## State of the character
-var selfState : String
+@export var pushbox: PackedScene ## Pushbox.
+@export var hitbox: PackedScene ## Character hitboxes.
+var selfState : String ## State of the character.
 
 # Temporary variables
-var hit_pause = 0
-var hit_pause_dur = 0
-var temp_pos = Vector2(0,0)
-var temp_vel = Vector2(0,0)
+var hit_pause : int = 0 ## Counter for hit pause duration
+var hit_pause_dur : int = 0 ## Duration of the hit pause
+var temp_pos = Vector2(0,0) ## Stored position of character during hit pause
+var temp_vel = Vector2(0,0) ## Stored velocity of character during hit pause
 
 # Effects
 @export var DashDust: PackedScene
 @export var LandingRipple: PackedScene
 
 # Onready Variables
-@onready var GroundL = $Raycasts/GroundL
-@onready var GroundR = $Raycasts/GroundR
-@onready var WallL = $Raycasts/WallL
-@onready var WallR = $Raycasts/WallR
-@onready var states = $State
-@onready var anim = $Sprite/AnimationPlayer
-@onready var effectMarkers = get_tree().get_nodes_in_group("EffectMarkers")
+@onready var GroundL : RayCast2D= $Raycasts/GroundL ## (Left) raycast checking for ground
+@onready var GroundR : RayCast2D = $Raycasts/GroundR ## (Right) raycast checking for ground
+@onready var WallL : RayCast2D = $Raycasts/WallL ## (Left) raycast checking for wall
+@onready var WallR : RayCast2D = $Raycasts/WallR ## (Right) raycast checking for ground
+@onready var displayedState : Label = $State ## Displayed state of the character
+@onready var anim : AnimationPlayer = $Sprite/AnimationPlayer
+@onready var effectMarkers : Array[Node] = get_tree().get_nodes_in_group("EffectMarkers")
 var stageScene = null  # initialized in _ready()
 
 # Preload collision shapes
@@ -93,9 +88,10 @@ var standing_cshape = preload("res://Characters/John/cshapes/standing.tres")
 var crouching_cshape = preload("res://Characters/John/cshapes/crouching.tres")
 var standing_collision_dia = preload("res://Characters/John/cshapes/standingCollisionDia.tres")
 
-var effectMarkerPosX : Dictionary = {}
+var effectMarkerPosX : Dictionary = {} ## Stores the spawn positions of effect animations.
 
-func create_pushbox(width, height, points):
+## Creates a hitbox at specified location, with defined caracteristics
+func create_pushbox(width : float, height : float, points : Vector2):
 	var pushbox_instance = pushbox.instantiate()
 	self.add_child(pushbox_instance)
 	var flip_x_points = Vector2(dir.xmult * points.x, points.y)
@@ -103,15 +99,15 @@ func create_pushbox(width, height, points):
 	pushbox_instance.set_parameters(width, height, flip_x_points)
 	return pushbox_instance
 	
-
+## Creates a hitbox at specified location, with defined caracteristics
 func create_hitbox(
-	width : int,
-	height : int,
+	width : float,
+	height : float,
 	damage : float, 
 	duration : int, 
-	angle : int, 
+	angle : float, 
 	angle_flipper : int, 
-	bk : int, 
+	bk : float, 
 	ks : float, 
 	type : String, 
 	points : Vector2, 
@@ -176,18 +172,19 @@ func _ready():
 		effectMarkerPosX[em.name] = em.position.x
 	stageScene = get_tree().current_scene
 	turn('right')
-	create_pushbox(30, 79.5, Vector2(0,6.5))
+	create_pushbox(25, 79.5, Vector2(0,6.5))
 	pass
 
 func _physics_process(_delta):
 	$Frames.text = str(frame)
-	selfState = states.text
+	selfState = displayedState.text
 	#for i in get_slide_collision_count():
 		#var c = get_slide_collision(i)
 		#if c.get_collider() is CharacterBody2D:
 			#print("c normal = %s" % c.get_normal())
 			#c.get_collider().velocity += -c.get_normal() * PUSH_FORCE
-	
+
+## Freezes the character during hit pause.
 func apply_hit_pause(delta):
 	if hit_pause < hit_pause_dur:
 		self.position = temp_pos
