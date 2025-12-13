@@ -44,7 +44,7 @@ class CharDirection:
 			flip = true
 			xmult = -1
 
-## Get the direction value as [String], with an input
+## Get the direction value as [String], with an input. (! only for Input.is_action_pressed()!)
 func get_dir_val(id : int) -> String: # Apply SOCD
 	if Input.is_action_pressed("right_%s" % id) and Input.is_action_pressed("left_%s" % id):
 		return 'neutral'

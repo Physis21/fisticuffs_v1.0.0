@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://pns8v8qpyruy"]
+
+[ext_resource type="Script" uid="uid://cmkhymegxnvyw" path="res://UI/CombatUI/combat_ui.gd" id="1_qfhr5"]
+[ext_resource type="FontFile" uid="uid://du4ndt4r8juir" path="res://Fonts/Dream Orphans.otf" id="2_vp612"]
+
+[node name="CombatUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qfhr5")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.1
+offset_left = 10.0
+offset_right = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_fonts/font = ExtResource("2_vp612")
+theme_override_font_sizes/font_size = 30
+text = "Character 1 UI"
+
+[node name="Label2" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_fonts/font = ExtResource("2_vp612")
+theme_override_font_sizes/font_size = 30
+text = "Character 2 UI"

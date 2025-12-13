@@ -510,9 +510,14 @@ func Falling():
 			return true
 			
 func WallCling(direction : Movement.InptDirection):
+	var dir_just_pressed : String = 'neutral'
+	if Input.is_action_just_pressed('right_%s' % parent.id):
+		dir_just_pressed = 'right'
+	elif Input.is_action_just_pressed('left_%s' % parent.id):
+		dir_just_pressed = 'left'
 	if is_airborne() and parent.wallcling_timer == 0:
-		if ((parent.WallL.is_colliding() and direction.val == 'right' and parent.walljumped == false) or
-		 (parent.WallR.is_colliding() and direction.val == 'left' and parent.walljumped == false)):
+		if ((parent.WallL.is_colliding() and dir_just_pressed == 'right' and parent.walljumped == false) or
+		 (parent.WallR.is_colliding() and dir_just_pressed == 'left' and parent.walljumped == false)):
 			#var collider = parent.WallL.get_collider()
 			#var collider2 = parent.WallR.get_collider()
 			parent._frame()

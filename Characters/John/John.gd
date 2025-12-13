@@ -64,21 +64,21 @@ var previous_mov_input = Movement.InptDirection.new() ## Previous movement input
 var selfState : String ## State of the character.
 
 # Temporary variables
-var hit_pause : int = 0 ## Counter for hit pause duration
-var hit_pause_dur : int = 0 ## Duration of the hit pause
-var temp_pos = Vector2(0,0) ## Stored position of character during hit pause
-var temp_vel = Vector2(0,0) ## Stored velocity of character during hit pause
+var hit_pause : int = 0 ## Counter for hit pause duration.
+var hit_pause_dur : int = 0 ## Duration of the hit pause.
+var temp_pos = Vector2(0,0) ## Stored position of character during hit pause.
+var temp_vel = Vector2(0,0) ## Stored velocity of character during hit pause.
 
 # Effects
 @export var DashDust: PackedScene
 @export var LandingRipple: PackedScene
 
 # Onready Variables
-@onready var GroundL : RayCast2D= $Raycasts/GroundL ## (Left) raycast checking for ground
-@onready var GroundR : RayCast2D = $Raycasts/GroundR ## (Right) raycast checking for ground
-@onready var WallL : RayCast2D = $Raycasts/WallL ## (Left) raycast checking for wall
-@onready var WallR : RayCast2D = $Raycasts/WallR ## (Right) raycast checking for ground
-@onready var displayedState : Label = $State ## Displayed state of the character
+@onready var GroundL : RayCast2D= $Raycasts/GroundL ## (Left) raycast checking for ground.
+@onready var GroundR : RayCast2D = $Raycasts/GroundR ## (Right) raycast checking for ground.
+@onready var WallL : RayCast2D = $Raycasts/WallL ## (Left) raycast checking for wall.
+@onready var WallR : RayCast2D = $Raycasts/WallR ## (Right) raycast checking for ground.
+@onready var displayedState : Label = $State ## Displayed state of the character.
 @onready var anim : AnimationPlayer = $Sprite/AnimationPlayer
 @onready var effectMarkers : Array[Node] = get_tree().get_nodes_in_group("EffectMarkers")
 var stageScene = null  # initialized in _ready()

@@ -1,7 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://b87jdaxnd48jk"]
+[gd_scene load_steps=6 format=3 uid="uid://b87jdaxnd48jk"]
 
 [ext_resource type="FontFile" uid="uid://du4ndt4r8juir" path="res://Fonts/Dream Orphans.otf" id="1_r25e1"]
-[ext_resource type="Script" uid="uid://d0cowo6t8ywec" path="res://Menu/PauseMenu/pause_menu.gd" id="1_uaobs"]
+[ext_resource type="Script" uid="uid://d0cowo6t8ywec" path="res://UI/PauseMenu/pause_menu.gd" id="1_uaobs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s70p5"]
+bg_color = Color(0.3901, 0.6320451, 0.83, 0.54901963)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fhxse"]
+bg_color = Color(0.40019998, 0.42368984, 0.87, 0.58431375)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sjch0"]
+bg_color = Color(0.6170667, 0.53400004, 0.89, 0.60784316)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="PauseMenu" type="Control"]
 process_mode = 3
@@ -34,12 +55,17 @@ theme_override_constants/separation = 60
 alignment = 1
 
 [node name="ResumeButton" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_r25e1")
 theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_s70p5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_fhxse")
+theme_override_styles/hover = SubResource("StyleBoxFlat_sjch0")
 text = "Resume"
 
 [node name="ExitButton" type="Button" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_r25e1")
 theme_override_font_sizes/font_size = 36
