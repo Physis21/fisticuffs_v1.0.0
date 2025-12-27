@@ -1,68 +1,17 @@
-class_name John extends CharacterBody2D
+class_name John extends fightChar
 ## First test character.
-
-# from fox stats
-
-# JOHN's main attributes
-const MAXHEALTH : float = 150 ## Maximum health.
-const WEIGHT : float = 100 ## Weight of the character (used to compute knockback values).
-const WALKSPEED : float = 300 ## Walking speed (px/frame).
-const RUNSPEED : float = 800 ## Running speed (px/frame).
-const DASHFRAMES : int = 16 ## Duration (in frames) of the dash animation.
-const JUMPFORCE : int = 900 ## Vertical speed induced by short hop (px/frame).
-const MAXJUMPFORCE : float = 1200 ## Vertical speed induced by jump (px/frame).
-const MAXAIRSPEED : float = 300 ## Maximum horizontal air speed.
-const AIR_ACCEL : float = 10 ## Maximum horizontal air acceleration.
-const FALLACCEL : float = 60 ## Falling acceleration (gravity) of the character.
-const FALLINGSPEED : float = 800 ## Falling speed
-const MAXFALLSPEED : float = 800 ## Fastfall falling speed
-const TRACTION : float = 400 * 2 ## Decelleration due to grounded traction (px/frame²)
-const TRACTION_ATTACK : float = 25 ## Traction due to grounded attacks (px/frame²)
-
-# Global variables
-var frame : int = 0 ## Frame counter. Is added 1 each _physics_process().
-var dir : Movement.CharDirection = Movement.CharDirection.new() ## Direction of character.
-
-# Attributes
-@export var id : int ## Character identifier, in order to differentiate simultaneous characters.
-@export var percentage : float = 20 ## The higher the percentage, the further the character is knocked back after an attack.
-@export var health : float = MAXHEALTH : set = set_health ## Character health, starts at maximum by default.
-@export var stocks : int = 3 ## Number of times the character must be KO'ed to.
-var freezeframes : int = 0 ## Number of frames the character is frozen. Is updated when struck by hitbox.
 
 # Buffers
 var wallcling_max : int = 90 ## Maximum number of frames the wallcling can be held.
-const WALLCLING_COOLDOWN : int= 30 ## Number of frames during which wallcling is deactivated after walljump.
+const WALLCLING_COOLDOWN : int = 30 ## Number of frames during which wallcling is deactivated after walljump.
 var wallcling_timer : int = 0 ## Timer for wallcling after a walljump.
-
-# Knockback
-var hdecay : float ## Knockback horizontal decay.
-var vdecay : float ## Knockback vertical decay.
-var knockback : float ## Knockback value.
-var hitstun : int ## Number of frames the character is stuck in hitstun.
-var connected: bool ## Checks whether an attack has connected.
-
 # Ground Variables
 
 # Air Variables
 var walljumped : bool = false ## True if the character has walljumped while airborne. Becomes false again after they touch the ground.
-var fastfall : bool = false ## True if the character has fastfalled while airborne. Becomes false again after they touch the ground.
-var jump_squat : int = 5 ## Number of frames of jump squat.
-var lag_frames:  int = 0 ## Number of lag frames after an action.
-var landing_frames : int = 3 ## Number of landing lag frames.
-var previous_mov_input = Movement.InptDirection.new() ## Previous movement input.
-
-@export var pushbox: PackedScene ## Pushbox.
-@export var hitbox: PackedScene ## Character hitboxes.
-var selfState : String ## State of the character.
-
-# Temporary variables
-var hit_pause : int = 0 ## Counter for hit pause duration.
-var hit_pause_dur : int = 0 ## Duration of the hit pause.
-var temp_pos = Vector2(0,0) ## Stored position of character during hit pause.
-var temp_vel = Vector2(0,0) ## Stored velocity of character during hit pause.
 
 # Effects
+@export_group("Effect scenes")
 @export var DashDust: PackedScene
 @export var LandingRipple: PackedScene
 
