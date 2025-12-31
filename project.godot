@@ -10,8 +10,9 @@ config_version=5
 
 [application]
 
-config/name="fisticuffs_v1.0.0"
-run/main_scene="res://Stages/TestStage.tscn"
+config/name="fisticuffs"
+config/version="1.0"
+run/main_scene="uid://beylf5ebtyq6a"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 run/max_fps=60
 config/icon="res://icon.svg"

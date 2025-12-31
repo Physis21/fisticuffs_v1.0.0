@@ -1,7 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://pns8v8qpyruy"]
+[gd_scene load_steps=6 format=3 uid="uid://pns8v8qpyruy"]
 
 [ext_resource type="Script" uid="uid://cmkhymegxnvyw" path="res://UI/CombatUI/combat_ui.gd" id="1_qfhr5"]
 [ext_resource type="FontFile" uid="uid://du4ndt4r8juir" path="res://Fonts/Dream Orphans.otf" id="2_vp612"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vp612"]
+font_size = 30
+font_color = Color(0, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mwiea"]
+font_size = 30
+
+[sub_resource type="LabelSettings" id="LabelSettings_yow2f"]
+font_size = 30
+font_color = Color(0, 1, 0, 1)
 
 [node name="CombatUi" type="Control"]
 layout_mode = 3
@@ -11,6 +22,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qfhr5")
+
+[node name="Timer" type="Timer" parent="."]
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -29,6 +42,16 @@ size_flags_horizontal = 0
 theme_override_fonts/font = ExtResource("2_vp612")
 theme_override_font_sizes/font_size = 30
 text = "Character 1 UI"
+label_settings = SubResource("LabelSettings_vp612")
+
+[node name="TimeCounter" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+text = "0"
+label_settings = SubResource("LabelSettings_mwiea")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Label1" type="Label" parent="MarginContainer"]
 layout_mode = 2
@@ -36,3 +59,4 @@ size_flags_horizontal = 8
 theme_override_fonts/font = ExtResource("2_vp612")
 theme_override_font_sizes/font_size = 30
 text = "Character 2 UI"
+label_settings = SubResource("LabelSettings_yow2f")
