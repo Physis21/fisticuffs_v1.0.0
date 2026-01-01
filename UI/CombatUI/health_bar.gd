@@ -32,6 +32,15 @@ func init_health(initial_health):
 	damage_bar.max_value = health
 	damage_bar.value = health
 
+## Flip the fill mode of both Health and Damage bars.
+func flip_fill_mode(yn: bool):
+	if yn == false:
+		self.fill_mode = 0
+		damage_bar.fill_mode = 0
+	else:
+		self.fill_mode = 1
+		damage_bar.fill_mode = 1
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass

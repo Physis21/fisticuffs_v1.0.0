@@ -136,7 +136,7 @@ func apply_hit_pause(delta):
 		hit_pause = 0
 
 # Attacks
-func s5A():
+func s5A(): #! always true each frame the attack is active
 	if frame == 9:
 		create_hitbox(40, 20, 8, 9, 10, 0, 160, 1, 'normal', Vector2(64, -25), 1)
 	if frame >= 26:

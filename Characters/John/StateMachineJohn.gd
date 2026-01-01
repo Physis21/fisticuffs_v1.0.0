@@ -505,8 +505,9 @@ func Falling():
 	if state_includes([states.INIT_DASH, states.RUN, states.WALK, states.STAND, states.CROUCH, states.CROUCHING, states.RUN, states.LANDING, states.JUMP_SQUAT]):
 		if is_airborne():
 			return true
-			
-func WallCling(direction : Movement.InptDirection):
+
+## Check if the character should cling on a wall. For now, the _direction argument is unused. 
+func WallCling(_direction : Movement.InptDirection):
 	var dir_just_pressed : String = 'neutral'
 	if Input.is_action_just_pressed('right_%s' % parent.id):
 		dir_just_pressed = 'right'

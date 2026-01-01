@@ -13,6 +13,7 @@ var time_counter_val : int = 0 ## Current value of time counter.
 func _ready() -> void:
 	time_counter_val = 0
 	seconds_timer.start()
+	health_bar_left.flip_fill_mode(true)
 	
 func _physics_process(_delta: float) -> void:
 	$MarginContainer/HealthTxt0.text = health_texts[0]

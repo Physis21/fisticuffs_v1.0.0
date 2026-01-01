@@ -19,8 +19,11 @@ func _process(_delta: float) -> void:
 	
 func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("dev_query"):
-		print("John position: %s" %  $JOHN.position)
-		print("John global position: %s" %  $JOHN.global_position)
+		print("John position: %s" %  $JOHN0.position)
+		print("John global position: %s" %  $JOHN0.global_position)
+		$JOHN0.health -= 10
+		print("Hurt John by 10 HP")
+		
 
 ## For signal debugging purposes
 func _print_signal(id, max_health, old_health, new_health):
