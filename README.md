@@ -4,6 +4,7 @@ Solo(-ish) personal project of a 2D fighter. This is also a useful reference for
 
 - This project heavily follow the structure of the [godot platform fighter series](https://www.youtube.com/watch?v=FKMBkZsPCCA&list=PLeJDGeZe3by2tQIJmCZfaSRl95cot070t), on youtube.
 - To implement more traditional fighter-like mechanics, **I differ from the tutorial greatly starting from the 5th video**
+- This is a project in the making, very unfinished.
 
 ## Requirements and installing
 
@@ -14,6 +15,12 @@ Solo(-ish) personal project of a 2D fighter. This is also a useful reference for
   - This will re-import the assets into the godot project
   - This step is important otherwise some textures will not appear when just running the game directly
 - Run the game from the godot game engine with `F5`. This will run the main menu, from which the test stage can be accessed.
+
+## Sample images from the game (in development)
+
+Title screen             |  Game footage
+:-------------------------:|:-------------------------:
+![](ReadmeAssets/title_screen.png)  |  ![](ReadmeAssets/fight_sample_0.png)
 
 ## Dimensions
 
@@ -29,7 +36,8 @@ Solo(-ish) personal project of a 2D fighter. This is also a useful reference for
 
 ## Unit testing
 
-- Consensus is that unit testing in games is time consuming and challenging → **not worth the time investment** in this solo dev project
+- Consensus is that unit testing in games is time consuming and challenging 
+	&rarr; **not worth the time investment** in this solo dev project
 
 ## TODO
 
